@@ -1,0 +1,1025 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="dark" />
+    <link rel="icon" href="data:," />
+    <title>LULUS SIM!</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <style>
+      :root{
+        --asphalt:#12151A; --panel:#1B1F26; --panel2:#22272F; --line:#2C333D;
+        --ink:#F5F7FA; --muted:#AAB4C0; --faint:#7E8894;
+        --yellow:#FFC800; --yellow-ink:#191203;
+        --red:#E5484D; --blue:#2563EB; --green:#2FBF71; --green-dark:#0E3B24;
+        --radius:14px;
+      }
+      *{box-sizing:border-box}
+      html{-webkit-text-size-adjust:100%}
+      body{margin:0;background:var(--asphalt);color:var(--ink);
+        font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
+        font-size:16px;line-height:1.5;}
+      button{font:inherit;color:inherit;background:none;border:none;cursor:pointer;padding:0}
+      button:focus-visible,a:focus-visible{outline:3px solid var(--yellow);outline-offset:2px;border-radius:6px}
+      .wrap{max-width:680px;margin:0 auto;padding:20px 16px 104px}
+      .screen{animation:screenIn .24s ease both}
+      @keyframes screenIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+      @media (prefers-reduced-motion:reduce){
+        .screen{animation:none}
+        .shake{animation:none!important}
+        .timer-danger{animation:none!important}
+      }
+      /* ---------- typography ---------- */
+      .display{font-family:"Barlow Condensed",Inter,sans-serif;text-transform:uppercase;letter-spacing:.02em;line-height:.95}
+      h1.title{font-family:"Barlow Condensed",Inter,sans-serif;font-size:64px;font-weight:700;
+        text-transform:uppercase;line-height:.9;margin:6px 0 4px;letter-spacing:.01em}
+      h1.title .accent{color:var(--yellow)}
+      .tagline{color:var(--muted);font-size:16px;margin:0 0 4px}
+      h2.sec{font-family:"Barlow Condensed",Inter,sans-serif;font-size:30px;font-weight:600;
+        text-transform:uppercase;letter-spacing:.03em;margin:26px 0 10px}
+      h2.sec:first-child{margin-top:0}
+      .page-head{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+      .page-head h2{font-family:"Barlow Condensed",Inter,sans-serif;font-size:32px;font-weight:600;
+        text-transform:uppercase;margin:0;letter-spacing:.03em;line-height:1}
+      .page-head .sub{color:var(--muted);font-size:13px;margin-top:2px}
+      .back-btn{display:flex;align-items:center;gap:6px;color:var(--ink);font-weight:600;font-size:14px;
+        background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:9px 12px;flex:none}
+      .back-btn svg{width:18px;height:18px}
+      /* ---------- marka divider ---------- */
+      .marka{height:0;border-top:4px dashed var(--yellow);opacity:.55;margin:22px 0}
+      .marka.white{border-top-color:#E8ECF1}
+      /* ---------- stat strip ---------- */
+      .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:16px}
+      @media(min-width:560px){.stats{grid-template-columns:repeat(4,1fr)}}
+      .stat{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:12px 14px}
+      .stat .num{font-family:"Barlow Condensed",Inter,sans-serif;font-size:34px;font-weight:700;line-height:1}
+      .stat .num.y{color:var(--yellow)}
+      .stat .lbl{color:var(--muted);font-size:12.5px;margin-top:3px;line-height:1.35}
+      /* ---------- entry cards ---------- */
+      .entries{display:grid;gap:12px;margin-top:6px}
+      @media(min-width:560px){.entries{grid-template-columns:repeat(3,1fr)}}
+      .entry{display:block;width:100%;text-align:left;background:var(--panel);border:1px solid var(--line);
+        border-radius:var(--radius);padding:16px;transition:border-color .15s ease,transform .15s ease}
+      .entry:active{transform:scale(.985)}
+      .entry .ic{width:46px;height:46px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:10px}
+      .entry .ic svg{width:26px;height:26px}
+      .ic.y{background:var(--yellow);color:var(--yellow-ink)}
+      .ic.r{background:var(--red);color:#fff}
+      .ic.b{background:var(--blue);color:#fff}
+      .entry h3{font-family:"Barlow Condensed",Inter,sans-serif;font-size:24px;font-weight:600;
+        text-transform:uppercase;margin:0 0 2px;letter-spacing:.02em}
+      .entry p{color:var(--muted);font-size:13.5px;margin:0}
+      .entry .go{margin-top:10px;font-weight:700;font-size:13.5px;color:var(--yellow);display:flex;align-items:center;gap:5px}
+      .entry .go svg{width:15px;height:15px}
+      /* ---------- generic cards / rows ---------- */
+      .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px}
+      .empty{color:var(--muted);background:var(--panel);border:1px dashed var(--line);
+        border-radius:var(--radius);padding:18px;text-align:center;font-size:14.5px}
+      .disclaimer{color:var(--faint);font-size:12.5px;line-height:1.55;margin-top:8px}
+      .hist-row{display:flex;align-items:center;gap:12px;background:var(--panel);border:1px solid var(--line);
+        border-radius:var(--radius);padding:12px 14px;margin-bottom:8px}
+      .hist-row .when{flex:1;min-width:0}
+      .hist-row .when b{display:block;font-size:15px}
+      .hist-row .when span{color:var(--muted);font-size:12.5px}
+      .hist-row .score{font-family:"Barlow Condensed",Inter,sans-serif;font-size:28px;font-weight:700;line-height:1}
+      .badge{font-size:11.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+        padding:4px 9px;border-radius:999px;white-space:nowrap}
+      .badge.pass{background:var(--green);color:#06180E}
+      .badge.fail{background:var(--red);color:#fff}
+      /* ---------- buttons ---------- */
+      .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;
+        background:var(--yellow);color:var(--yellow-ink);font-weight:800;font-size:16px;
+        border-radius:12px;padding:15px 18px;border:1px solid var(--yellow)}
+      .btn:active{transform:scale(.99)}
+      .btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+      .btn.blue{background:var(--blue);border-color:var(--blue);color:#fff}
+      .btn.red{background:var(--red);border-color:var(--red);color:#fff}
+      .btn.sm{width:auto;padding:10px 16px;font-size:14px;border-radius:10px}
+      .btn[disabled]{opacity:.45;cursor:not-allowed}
+      .btn-row{display:grid;gap:10px;margin-top:14px}
+      @media(min-width:560px){.btn-row.two{grid-template-columns:1fr 1fr}}
+      /* ---------- category rows ---------- */
+      .cat-row{display:block;width:100%;text-align:left;background:var(--panel);border:1px solid var(--line);
+        border-radius:var(--radius);padding:15px 16px;margin-bottom:10px}
+      .cat-row h3{margin:0;font-size:16.5px;font-weight:700}
+      .cat-row .meta{color:var(--muted);font-size:13px;margin-top:2px}
+      .bar{height:8px;background:var(--panel2);border-radius:99px;overflow:hidden;margin-top:10px}
+      .bar i{display:block;height:100%;background:var(--yellow);border-radius:99px}
+      .bar i.g{background:var(--green)}
+      /* ---------- question card ---------- */
+      .qcard{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:18px}
+      .qcard.shake{animation:shake .45s ease}
+      @keyframes shake{10%,90%{transform:translateX(-1px)}20%,80%{transform:translateX(2px)}
+        30%,50%,70%{transform:translateX(-5px)}40%,60%{transform:translateX(5px)}}
+      .qmeta{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+      .qcount{font-weight:700;font-size:13px;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+      .qsign{display:flex;justify-content:center;padding:6px 0 14px}
+      .qsign svg{width:132px;height:132px}
+      .qtext{font-size:18.5px;font-weight:600;line-height:1.45;margin:0 0 16px}
+      .opts{display:grid;gap:10px}
+      .opt{display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left;background:var(--panel2);
+        border:2px solid var(--line);border-radius:12px;padding:13px 14px;font-size:15.5px;line-height:1.4}
+      .opt .letter{flex:none;width:28px;height:28px;border-radius:8px;background:var(--asphalt);
+        border:1px solid var(--line);display:flex;align-items:center;justify-content:center;
+        font-weight:800;font-size:14px;margin-top:-1px}
+      .opt.picked{border-color:var(--yellow)}
+      .opt.correct{border-color:var(--green);background:var(--green-dark)}
+      .opt.correct .letter{background:var(--green);border-color:var(--green);color:#06180E}
+      .opt.wrong{border-color:var(--red);background:#3D1417}
+      .opt.wrong .letter{background:var(--red);border-color:var(--red);color:#fff}
+      .opt.dim{opacity:.55}
+      .opt[disabled]{cursor:default}
+      .feedback{margin-top:16px;border-radius:12px;padding:14px 16px;font-size:14.5px;line-height:1.55}
+      .feedback.ok{background:var(--green-dark);border:1px solid var(--green)}
+      .feedback.no{background:#3D1417;border:1px solid var(--red)}
+      .feedback b.head{display:block;font-size:15.5px;margin-bottom:4px}
+      .feedback .ref{display:inline-block;margin-top:8px;font-size:12px;font-weight:700;letter-spacing:.03em;
+        background:rgba(255,255,255,.12);padding:3px 9px;border-radius:999px;text-transform:uppercase}
+      .progress-line{height:8px;background:var(--panel2);border-radius:99px;overflow:hidden;margin-bottom:16px}
+      .progress-line i{display:block;height:100%;background:var(--yellow);transition:width .25s ease}
+      /* ---------- exam ---------- */
+      .exam-top{position:sticky;top:0;z-index:5;background:var(--asphalt);padding:10px 0 12px;margin:-4px 0 4px}
+      .exam-top .row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+      .timer{font-family:"Barlow Condensed",Inter,sans-serif;font-size:38px;font-weight:700;line-height:1;
+        background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:4px 16px;min-width:118px;text-align:center}
+      .timer-danger{color:#fff!important;background:var(--red)!important;border-color:var(--red)!important;
+        animation:tpulse 1s ease-in-out infinite}
+      @keyframes tpulse{50%{transform:scale(1.07)}}
+      .answered-count{font-weight:700;font-size:14px;color:var(--muted)}
+      .answered-count b{color:var(--ink);font-size:17px}
+      .grid-wrap{margin:12px 0 4px}
+      .numgrid{display:grid;grid-template-columns:repeat(6,1fr);gap:7px}
+      @media(min-width:560px){.numgrid{grid-template-columns:repeat(10,1fr)}}
+      .numgrid button{aspect-ratio:1;border-radius:9px;background:var(--panel2);border:2px solid var(--line);
+        font-weight:700;font-size:14.5px;position:relative;color:var(--ink)}
+      .numgrid button.done{background:var(--yellow);border-color:var(--yellow);color:var(--yellow-ink)}
+      .numgrid button.now{border-color:#fff;box-shadow:0 0 0 2px var(--asphalt),0 0 0 4px #fff}
+      .numgrid button.flag::after{content:"";position:absolute;top:4px;right:4px;width:8px;height:8px;
+        border-radius:50%;background:var(--red);border:1.5px solid var(--asphalt)}
+      .numgrid button.done.flag::after{border-color:var(--yellow)}
+      .legend{display:flex;flex-wrap:wrap;gap:14px;color:var(--muted);font-size:12.5px;margin-top:10px}
+      .legend span{display:inline-flex;align-items:center;gap:6px}
+      .legend i{width:13px;height:13px;border-radius:4px;display:inline-block;border:2px solid var(--line);background:var(--panel2)}
+      .legend i.done{background:var(--yellow);border-color:var(--yellow)}
+      .legend i.dot{background:var(--red);border-radius:50%;border:none;width:9px;height:9px}
+      .exam-actions{display:flex;gap:9px;margin-top:16px}
+      .exam-actions .btn{padding:13px 10px;font-size:15px}
+      .flag-btn{display:inline-flex;align-items:center;gap:7px;font-weight:700;font-size:14px;
+        border:2px solid var(--line);border-radius:10px;padding:9px 13px;background:var(--panel)}
+      .flag-btn svg{width:16px;height:16px}
+      .flag-btn.on{border-color:var(--red);color:#FFB3B8;background:#3D1417}
+      /* ---------- result ---------- */
+      .result-hero{text-align:center;padding:10px 0 2px}
+      .result-hero .big{font-family:"Barlow Condensed",Inter,sans-serif;font-size:110px;font-weight:700;line-height:.95}
+      .result-hero .big small{font-size:44px;color:var(--muted)}
+      .result-hero .verdict{font-family:"Barlow Condensed",Inter,sans-serif;font-size:40px;font-weight:700;
+        text-transform:uppercase;letter-spacing:.04em;margin-top:2px}
+      .verdict.pass{color:var(--green)} .verdict.fail{color:var(--red)}
+      .result-hero .cheer{color:var(--muted);font-size:15.5px;max-width:420px;margin:6px auto 0}
+      .tally{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:18px}
+      .review-item{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+        padding:15px 16px;margin-bottom:10px}
+      .review-item .rq{font-weight:600;font-size:15.5px;line-height:1.45;margin:0 0 10px}
+      .review-item .rq .n{color:var(--yellow);font-weight:800;margin-right:6px}
+      .ans-line{font-size:14px;padding:8px 11px;border-radius:9px;margin-bottom:6px;line-height:1.45}
+      .ans-line.good{background:var(--green-dark);border:1px solid var(--green)}
+      .ans-line.bad{background:#3D1417;border:1px solid var(--red)}
+      .ans-line .tag{font-weight:800;font-size:11px;letter-spacing:.05em;text-transform:uppercase;display:block;opacity:.85}
+      .review-item .rexp{color:var(--muted);font-size:13.5px;margin:8px 0 0;line-height:1.55}
+      .review-item .rsign{display:flex;justify-content:center;padding:2px 0 10px}
+      .review-item .rsign svg{width:88px;height:88px}
+      /* ---------- kamus ---------- */
+      .chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+      .chip{border:2px solid var(--line);background:var(--panel);border-radius:999px;padding:8px 15px;
+        font-weight:700;font-size:14px;color:var(--muted)}
+      .chip.on{border-color:var(--yellow);background:var(--yellow);color:var(--yellow-ink)}
+      .sign-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+      @media(min-width:560px){.sign-grid{grid-template-columns:repeat(4,1fr)}}
+      .sign-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+        padding:12px 8px 10px;text-align:center;display:block;width:100%}
+      .sign-card svg{width:72px;height:72px}
+      .sign-card .nm{font-size:12.5px;font-weight:600;line-height:1.3;margin-top:7px}
+      .sign-card .grp{font-size:10.5px;color:var(--faint);text-transform:uppercase;letter-spacing:.05em;font-weight:700}
+      /* ---------- modal ---------- */
+      .overlay{position:fixed;inset:0;background:rgba(4,6,9,.78);z-index:50;display:flex;
+        align-items:flex-end;justify-content:center;padding:0}
+      @media(min-width:560px){.overlay{align-items:center;padding:20px}}
+      .sheet{background:var(--panel);border:1px solid var(--line);border-radius:18px 18px 0 0;
+        width:100%;max-width:520px;max-height:88vh;overflow:auto;padding:22px 20px 26px;
+        animation:sheetIn .24s ease both}
+      @media(min-width:560px){.sheet{border-radius:18px}}
+      @keyframes sheetIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+      .sheet h3{font-family:"Barlow Condensed",Inter,sans-serif;font-size:28px;font-weight:600;
+        text-transform:uppercase;margin:0 0 6px;letter-spacing:.02em}
+      .sheet p{color:var(--muted);font-size:14.5px;line-height:1.55;margin:0 0 8px}
+      .sheet p b{color:var(--ink)}
+      .sheet .sign-big{display:flex;justify-content:center;padding:8px 0 14px}
+      .sheet .sign-big svg{width:150px;height:150px}
+      .sheet .lbl{font-size:11.5px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--yellow);margin:14px 0 3px}
+      /* ---------- bottom nav ---------- */
+      .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:40;background:#171B21;
+        border-top:1px solid var(--line);display:flex;justify-content:center;
+        padding-bottom:env(safe-area-inset-bottom)}
+      .tabbar .inner{width:100%;max-width:680px;display:grid;grid-template-columns:repeat(5,1fr)}
+      .tab{display:flex;flex-direction:column;align-items:center;gap:2px;padding:9px 2px 8px;
+        color:var(--faint);font-size:11px;font-weight:600}
+      .tab svg{width:22px;height:22px}
+      .tab.on{color:var(--yellow)}
+      #confetti{position:fixed;inset:0;pointer-events:none;z-index:60}
+      .hidden{display:none!important}
+    </style>
+  </head>
+  <body>
+    <main class="wrap" id="view"></main>
+    <nav class="tabbar" aria-label="Navigasi utama"><div class="inner" id="tabbar"></div></nav>
+    <div id="modal-root"></div>
+    <canvas id="confetti" class="hidden"></canvas>
+
+    <script>
+    "use strict";
+    /* ================= DATA: BANK SOAL (60 soal, persis) ================= */
+    const QUESTIONS = [
+    {"id":1,"cat":"rambu","q":"Rambu berbentuk lingkaran putih dengan tepi merah dan angka 40 di tengahnya berarti...","opts":["Kecepatan minimum 40 km/jam","Kecepatan maksimum yang diperbolehkan 40 km/jam","Jarak ke kota berikutnya 40 km","Jumlah kendaraan maksimal 40 unit"],"a":1,"exp":"Lingkaran putih tepi merah adalah rambu larangan; angka di dalamnya adalah batas kecepatan maksimum.","ref":"Rambu larangan"},
+    {"id":2,"cat":"rambu","q":"Rambu berbentuk segitiga dengan warna dasar kuning umumnya berarti...","opts":["Larangan","Perintah","Peringatan akan bahaya atau kondisi jalan di depan","Petunjuk arah"],"a":2,"exp":"Warna kuning pada rambu berarti peringatan, misalnya tikungan tajam atau jalan licin di depan.","ref":"Rambu peringatan"},
+    {"id":3,"cat":"rambu","q":"Rambu segitiga terbalik dengan tepi merah dan latar putih berarti...","opts":["Dilarang masuk","Berhenti total","Beri kesempatan kepada kendaraan dari arah lain","Jalan buntu di depan"],"a":2,"exp":"Rambu ini memerintahkan pengemudi memberi kesempatan (yield) pada kendaraan dari arah lain.","ref":"Rambu perintah — beri kesempatan"},
+    {"id":4,"cat":"rambu","q":"Rambu lingkaran merah dengan garis horizontal putih di tengahnya berarti...","opts":["Dilarang berhenti","Dilarang masuk","Dilarang parkir","Dilarang mendahului"],"a":1,"exp":"Garis horizontal putih dalam lingkaran merah adalah rambu larangan masuk.","ref":"Rambu larangan"},
+    {"id":5,"cat":"rambu","q":"Rambu lingkaran biru dengan panah putih mengarah ke kiri berarti...","opts":["Belok kiri dilarang","Wajib mengikuti arah panah, yaitu belok kiri","Jalan satu arah ke kanan","Putar balik diizinkan"],"a":1,"exp":"Lingkaran biru adalah rambu perintah: pengemudi wajib mengikuti arah yang ditunjukkan panah.","ref":"Rambu perintah"},
+    {"id":6,"cat":"rambu","q":"Rambu persegi biru dengan huruf P putih berarti...","opts":["Dilarang parkir","Tempat parkir","Parkir hanya untuk motor","Parkir berbayar"],"a":1,"exp":"Huruf P putih di kotak biru adalah rambu petunjuk tempat parkir.","ref":"Rambu petunjuk"},
+    {"id":7,"cat":"rambu","q":"Rambu lingkaran biru tepi merah dengan huruf P dan garis diagonal merah berarti...","opts":["Tempat parkir","Dilarang parkir","Parkir khusus disabilitas","Parkir maksimal 1 jam"],"a":1,"exp":"Garis diagonal merah pada rambu berarti larangan; P yang dicoret berarti dilarang parkir.","ref":"Rambu larangan"},
+    {"id":8,"cat":"rambu","q":"Rambu lingkaran biru tepi merah dengan huruf S dan garis diagonal merah berarti...","opts":["Dilarang parkir","Dilarang berhenti","Tempat pemberhentian bus","Batas kecepatan"],"a":1,"exp":"Huruf S (stop) yang dicoret garis merah berarti dilarang berhenti di lokasi itu.","ref":"Rambu larangan"},
+    {"id":9,"cat":"rambu","q":"Rambu segitiga kuning dengan gambar orang berjalan kaki berarti...","opts":["Trotoar di depan","Peringatan ada penyeberangan atau banyak pejalan kaki di depan","Jalan khusus pejalan kaki","Dilarang berjalan kaki"],"a":1,"exp":"Segitiga kuning adalah peringatan: waspada, ada pejalan kaki menyeberang di depan.","ref":"Rambu peringatan"},
+    {"id":10,"cat":"rambu","q":"Rambu belah ketupat kuning dengan dua garis hitam yang menyempit di tengah berarti...","opts":["Jalan licin di depan","Jalan menyempit di kedua sisi","Jembatan sempit di depan","Tikungan tajam"],"a":1,"exp":"Dua garis yang menyempit menandakan lebar jalan akan berkurang di kedua sisi.","ref":"Rambu peringatan"},
+    {"id":11,"cat":"rambu","q":"Rambu lingkaran putih tepi merah dengan gambar sepeda motor dan garis diagonal merah berarti...","opts":["Tempat parkir motor","Sepeda motor dilarang masuk atau melintas","Wajib menggunakan motor","Jalur khusus motor"],"a":1,"exp":"Gambar yang dicoret garis diagonal merah adalah rambu larangan bagi kendaraan tersebut.","ref":"Rambu larangan"},
+    {"id":12,"cat":"rambu","q":"Rambu persegi biru dengan huruf H putih berarti...","opts":["Hotel","Rumah sakit","Halte bus","Pom bensin"],"a":1,"exp":"Huruf H putih di kotak biru adalah rambu petunjuk lokasi rumah sakit.","ref":"Rambu petunjuk"},
+    {"id":13,"cat":"rambu","q":"Rambu segitiga kuning dengan gambar rel kereta api berarti...","opts":["Stasiun kereta di depan","Peringatan ada perlintasan kereta api di depan","Dilarang melintasi rel","Jalan khusus kereta"],"a":1,"exp":"Segitiga kuning memperingatkan adanya perlintasan kereta api di depan; kurangi kecepatan.","ref":"Rambu peringatan"},
+    {"id":14,"cat":"rambu","q":"Rambu lingkaran biru dengan tiga panah putih melingkar berarti...","opts":["Putar balik diizinkan","Wajib mengikuti arah bundaran","Dilarang berbelok","Jalan memutar di depan"],"a":1,"exp":"Panah melingkar biru adalah perintah untuk mengikuti arah bundaran (roundabout).","ref":"Rambu perintah"},
+    {"id":15,"cat":"marka","q":"Garis putih utuh (tanpa putus) di tengah jalan berarti...","opts":["Boleh mendahului asal aman","Dilarang melintasi garis untuk mendahului","Garis pembatas lajur biasa","Hanya hiasan jalan"],"a":1,"exp":"Garis utuh tidak boleh dilintasi; biasanya ada di tikungan atau tanjakan yang visibilitasnya rendah.","ref":"Marka membujur"},
+    {"id":16,"cat":"marka","q":"Garis putih putus-putus di tengah jalan berarti...","opts":["Dilarang melintasi garis","Boleh pindah jalur atau mendahului jika aman","Jalan satu arah","Batas kecepatan"],"a":1,"exp":"Garis putus-putus memperbolehkan pindah jalur atau mendahului dengan tetap memperhatikan keamanan.","ref":"Marka membujur"},
+    {"id":17,"cat":"marka","q":"Garis ganda di tengah jalan, satu putus-putus dan satu utuh, berarti...","opts":["Kedua sisi dilarang mendahului","Sisi garis putus-putus boleh mendahului, sisi garis utuh dilarang","Semua kendaraan boleh saling mendahului","Jalan hanya untuk satu arah"],"a":1,"exp":"Aturan mengikuti garis yang paling dekat dengan kendaraanmu: garis putus boleh dilintasi, garis utuh tidak.","ref":"Marka membujur"},
+    {"id":18,"cat":"marka","q":"Marka berupa garis zig-zag kuning di pinggir jalan berarti...","opts":["Tempat parkir motor","Area dilarang berhenti atau parkir","Tempat menaikkan penumpang","Area khusus pedagang"],"a":1,"exp":"Garis zig-zag kuning menandakan area yang dilarang untuk berhenti atau parkir.","ref":"Marka jalan"},
+    {"id":19,"cat":"marka","q":"Kotak kuning (yellow box junction) di persimpangan berarti...","opts":["Area parkir sementara","Dilarang berhenti di dalam kotak meskipun lampu hijau, jika jalan di depan macet","Area belok kiri langsung","Tempat penyeberangan"],"a":1,"exp":"Jangan masuk ke kotak kuning bila tidak bisa keluar — supaya persimpangan tidak terkunci macet.","ref":"Marka jalan"},
+    {"id":20,"cat":"marka","q":"Garis melintang putih tebal di depan persimpangan atau lampu lalu lintas adalah...","opts":["Garis hiasan","Garis stop: kendaraan wajib berhenti di belakang garis","Batas lajur belok","Garis parkir"],"a":1,"exp":"Garis stop menandakan titik tempat kendaraan harus berhenti sebelum persimpangan atau lampu merah.","ref":"Marka melintang"},
+    {"id":21,"cat":"marka","q":"Zebra cross adalah...","opts":["Tempat parkir motor","Area penyeberangan pejalan kaki; pejalan kaki harus didahulukan","Garis batas kecepatan","Area berhenti darurat"],"a":1,"exp":"Di zebra cross, pengemudi wajib mendahulukan pejalan kaki yang sedang menyeberang.","ref":"Marka penyeberangan"},
+    {"id":22,"cat":"marka","q":"Marka panah di permukaan aspal menunjukkan...","opts":["Arah lajur yang wajib diikuti","Batas kecepatan lajur itu","Jarak aman antar kendaraan","Arah ke kota terdekat"],"a":0,"exp":"Panah di aspal adalah marka lambang yang mengatur arah pergerakan kendaraan di lajur tersebut.","ref":"Marka lambang"},
+    {"id":23,"cat":"marka","q":"Area jalan dengan garis-garis diagonal (chevron) di tengahnya berarti...","opts":["Area parkir","Area yang dilarang dilintasi atau dimasuki kendaraan","Area mendahului","Area istirahat"],"a":1,"exp":"Marka serong (chevron) menandai pulau lalu lintas yang tidak boleh dilintasi kendaraan.","ref":"Marka serong"},
+    {"id":24,"cat":"marka","q":"Tulisan STOP yang dicat di permukaan jalan berarti...","opts":["Kurangi kecepatan saja","Wajib berhenti sejenak sebelum melanjutkan","Dilarang masuk","Belok kiri langsung"],"a":1,"exp":"Tulisan STOP di aspal sama dengan rambu stop: berhenti, periksa keadaan, baru jalan lagi.","ref":"Marka lambang"},
+    {"id":25,"cat":"peraturan","q":"Menurut UU 22/2009, kendaraan berikut yang memiliki hak utama di jalan adalah...","opts":["Mobil pribadi yang terburu-buru","Rombongan pejabat","Pemadam kebakaran yang sedang bertugas","Sepeda motor yang melaju cepat"],"a":2,"exp":"Pasal 134 UU 22/2009: pemadam kebakaran bertugas, ambulans, kendaraan pertolongan kecelakaan, dan iring-iringan jenazah punya hak utama.","ref":"UU 22/2009 Pasal 134"},
+    {"id":26,"cat":"peraturan","q":"Batas kecepatan maksimum di kawasan permukiman adalah...","opts":["20 km/jam","30 km/jam","40 km/jam","50 km/jam"],"a":1,"exp":"PP 79/2013: kawasan permukiman paling tinggi 30 km/jam, kawasan perkotaan 50 km/jam.","ref":"PP 79/2013 Pasal 23"},
+    {"id":27,"cat":"peraturan","q":"Batas kecepatan maksimum di jalan tol adalah...","opts":["60 km/jam","80 km/jam","100 km/jam","120 km/jam"],"a":2,"exp":"PP 79/2013: jalan bebas hambatan paling rendah 60 dan paling tinggi 100 km/jam.","ref":"PP 79/2013 Pasal 23"},
+    {"id":28,"cat":"peraturan","q":"Batas kecepatan maksimum di kawasan perkotaan adalah...","opts":["30 km/jam","40 km/jam","50 km/jam","80 km/jam"],"a":2,"exp":"PP 79/2013: kawasan perkotaan paling tinggi 50 km/jam.","ref":"PP 79/2013 Pasal 23"},
+    {"id":29,"cat":"peraturan","q":"Usia minimal untuk memiliki SIM C (sepeda motor) adalah...","opts":["16 tahun","17 tahun","18 tahun","20 tahun"],"a":1,"exp":"Pasal 81 UU 22/2009: SIM A dan SIM C minimal 17 tahun.","ref":"UU 22/2009 Pasal 81"},
+    {"id":30,"cat":"peraturan","q":"Masa berlaku SIM adalah...","opts":["3 tahun","5 tahun","10 tahun","Seumur hidup"],"a":1,"exp":"Pasal 85 UU 22/2009: SIM berlaku selama 5 tahun dan dapat diperpanjang.","ref":"UU 22/2009 Pasal 85"},
+    {"id":31,"cat":"peraturan","q":"Mengemudikan kendaraan tanpa memiliki SIM dapat dipidana dengan...","opts":["Denda maksimal Rp250.000","Kurungan maksimal 4 bulan atau denda maksimal Rp1.000.000","Teguran lisan saja","Denda maksimal Rp500.000"],"a":1,"exp":"Pasal 281 UU 22/2009: mengemudi tanpa SIM — kurungan paling lama 4 bulan atau denda paling banyak Rp1.000.000.","ref":"UU 22/2009 Pasal 281"},
+    {"id":32,"cat":"peraturan","q":"Pengendara motor yang tidak memakai helm berstandar SNI dapat dipidana dengan...","opts":["Denda maksimal Rp100.000","Kurungan maksimal 1 bulan atau denda maksimal Rp250.000","Kurungan maksimal 4 bulan","Denda maksimal Rp1.000.000"],"a":1,"exp":"Pasal 291 ayat 1 UU 22/2009: tidak memakai helm SNI — kurungan paling lama 1 bulan atau denda paling banyak Rp250.000.","ref":"UU 22/2009 Pasal 291"},
+    {"id":33,"cat":"peraturan","q":"Menerobos lampu merah dapat dipidana dengan...","opts":["Kurungan maksimal 2 bulan atau denda maksimal Rp500.000","Denda maksimal Rp250.000","Teguran tertulis","Kurungan maksimal 1 bulan"],"a":0,"exp":"Pasal 287 ayat 2 UU 22/2009: melanggar alat pemberi isyarat lalu lintas — kurungan paling lama 2 bulan atau denda paling banyak Rp500.000.","ref":"UU 22/2009 Pasal 287"},
+    {"id":34,"cat":"peraturan","q":"Mengemudi sambil menggunakan ponsel sehingga tidak penuh konsentrasi dapat dipidana dengan...","opts":["Denda maksimal Rp250.000","Kurungan maksimal 3 bulan atau denda maksimal Rp750.000","Teguran lisan","Denda maksimal Rp500.000"],"a":1,"exp":"Pasal 283 UU 22/2009: mengemudi tidak wajar/tidak penuh konsentrasi — kurungan paling lama 3 bulan atau denda paling banyak Rp750.000.","ref":"UU 22/2009 Pasal 283"},
+    {"id":35,"cat":"peraturan","q":"Di persimpangan berlampu merah, pengemudi yang hendak belok kiri...","opts":["Boleh langsung belok kiri","Dilarang langsung belok kiri, kecuali ada rambu atau isyarat yang mengizinkan","Wajib belok kiri","Boleh belok kiri jika tidak ada polisi"],"a":1,"exp":"Pasal 112 ayat 3 UU 22/2009: dilarang langsung belok kiri di lampu merah kecuali ditentukan lain oleh rambu atau APILL.","ref":"UU 22/2009 Pasal 112"},
+    {"id":36,"cat":"peraturan","q":"Saat mendahului kendaraan lain, pengemudi harus...","opts":["Mendahului dari sebelah kiri","Mendahului dari sebelah kanan dan memastikan jalur aman","Membunyikan klakson terus-menerus","Mendahului di tikungan agar cepat"],"a":1,"exp":"Pasal 109 UU 22/2009: mendahului dari sebelah kanan; dilarang mendahului di tikungan, jembatan, persimpangan, dan tanjakan.","ref":"UU 22/2009 Pasal 109"},
+    {"id":37,"cat":"peraturan","q":"Pengendara sepeda motor pada siang hari wajib...","opts":["Mematikan lampu utama","Menyalakan lampu utama","Menyalakan lampu hazard","Menyalakan lampu jauh"],"a":1,"exp":"Pasal 107 ayat 2 UU 22/2009: pengendara motor wajib menyalakan lampu utama pada siang hari.","ref":"UU 22/2009 Pasal 107"},
+    {"id":38,"cat":"peraturan","q":"Dokumen yang wajib dibawa saat mengemudikan kendaraan bermotor adalah...","opts":["KTP saja","SIM dan STNK","BPKB","SIM saja"],"a":1,"exp":"Pasal 106 ayat 5 UU 22/2009: pengemudi wajib membawa SIM dan STNK.","ref":"UU 22/2009 Pasal 106"},
+    {"id":39,"cat":"etika","q":"Jarak aman yang dianjurkan antar kendaraan saat berkendara adalah...","opts":["Aturan 1 detik","Aturan 2 detik","Aturan 3 detik","Aturan 5 detik"],"a":2,"exp":"Aturan 3 detik: jaga jarak minimal 3 detik dari kendaraan di depan agar sempat mengerem saat darurat.","ref":"Jarak aman berkendara"},
+    {"id":40,"cat":"etika","q":"Saat ada pejalan kaki menyeberang di zebra cross, pengemudi harus...","opts":["Membunyikan klakson agar cepat menyeberang","Mendahulukan pejalan kaki","Tetap melaju karena kendaraan prioritas","Menyalip dari samping"],"a":1,"exp":"Pejalan kaki di tempat penyeberangan harus didahulukan; berhenti dan beri kesempatan menyeberang.","ref":"UU 22/2009 — pejalan kaki"},
+    {"id":41,"cat":"etika","q":"Lampu lalu lintas kuning menyala berarti...","opts":["Tancap gas agar keburu lewat","Berhati-hati dan bersiap berhenti","Berhenti total di tengah persimpangan","Jalan terus dengan kecepatan penuh"],"a":1,"exp":"Kuning berarti bersiap berhenti; jangan menambah kecepatan untuk mengejar lampu.","ref":"Alat pemberi isyarat lalu lintas"},
+    {"id":42,"cat":"etika","q":"Lampu lalu lintas kuning berkedip-kedip berarti...","opts":["Berhenti segera","Menambah kecepatan","Berjalan terus dengan hati-hati dan waspada","Putar balik"],"a":2,"exp":"Kuning berkedip adalah isyarat peringatan: jalan terus dengan hati-hati di persimpangan.","ref":"Alat pemberi isyarat lalu lintas"},
+    {"id":43,"cat":"etika","q":"Lampu hazard (lampu darurat) sebaiknya dinyalakan...","opts":["Saat hujan deras","Saat kendaraan berhenti darurat atau mogok","Saat berkendara di terowongan","Saat ingin mendahului"],"a":1,"exp":"Hazard hanya untuk keadaan darurat, misalnya mogok. Menyalakannya saat hujan deras justru membingungkan pengendara lain.","ref":"Etika berkendara"},
+    {"id":44,"cat":"etika","q":"Penggunaan lampu jauh (high beam) yang benar adalah...","opts":["Selalu dinyalakan di jalan kota yang terang","Dinyalakan saat jalan gelap dan sepi, dimatikan saat berpapasan","Dinyalakan saat hujan deras","Dinyalakan terus agar terlihat keren"],"a":1,"exp":"Lampu jauh membantu di jalan gelap, tapi menyilaukan pengendara dari arah berlawanan — matikan saat berpapasan.","ref":"Etika berkendara"},
+    {"id":45,"cat":"etika","q":"Saat hujan deras, hal yang paling tepat dilakukan pengemudi adalah...","opts":["Menambah kecepatan agar cepat sampai","Mengurangi kecepatan dan menjaga jarak lebih jauh","Menyalakan lampu hazard dan tetap ngebut","Mengerem mendadak"],"a":1,"exp":"Jalan licin saat hujan membuat jarak pengereman bertambah; kurangi kecepatan dan jaga jarak.","ref":"Keselamatan berkendara"},
+    {"id":46,"cat":"etika","q":"Sebelum pindah jalur, urutan yang benar adalah...","opts":["Langsung pindah, kendaraan lain akan mengalah","Cek spion, cek blind spot, nyalakan sein, lalu pindah saat aman","Nyalakan klakson lalu pindah","Pindah dulu baru nyalakan sein"],"a":1,"exp":"Cek spion dan blind spot dulu, beri isyarat sein, pindah hanya saat jalur benar-benar aman.","ref":"Etika berkendara"},
+    {"id":47,"cat":"etika","q":"Jika merasa mengantuk saat mengemudi, tindakan paling aman adalah...","opts":["Membuka jendela dan memaksakan diri","Minum kopi lalu lanjut ngebut","Berhenti di tempat aman dan istirahat","Menyalakan musik keras-keras"],"a":2,"exp":"Mengantuk sama berbahayanya dengan mabuk. Berhenti dan tidur sejenak jauh lebih aman daripada memaksakan diri.","ref":"Keselamatan berkendara"},
+    {"id":48,"cat":"etika","q":"Mengemudi dalam pengaruh alkohol atau narkoba...","opts":["Boleh asal pelan-pelan","Boleh untuk jarak dekat","Dilarang karena menurunkan konsentrasi dan reaksi","Boleh asal tidak ketahuan"],"a":2,"exp":"Alkohol dan narkoba menurunkan konsentrasi, penilaian jarak, dan waktu reaksi — dilarang mengemudi dalam pengaruhnya.","ref":"UU 22/2009 Pasal 106"},
+    {"id":49,"cat":"etika","q":"Jika terlibat kecelakaan lalu lintas, pengemudi wajib...","opts":["Langsung pergi dari lokasi","Berhenti, memberi pertolongan, mengamankan lokasi, dan melapor ke polisi","Menyalahkan pihak lain","Menunggu orang lain yang melapor"],"a":1,"exp":"Pasal 231 UU 22/2009: pengemudi yang terlibat kecelakaan wajib berhenti, memberi pertolongan, dan melaporkan ke polisi.","ref":"UU 22/2009 Pasal 231"},
+    {"id":50,"cat":"etika","q":"Penggunaan klakson yang benar adalah...","opts":["Dibunyikan terus-menerus di kemacetan","Dipakai seperlunya untuk memberi peringatan, tidak berlebihan dan tidak di dekat rumah sakit/sekolah","Dibunyikan keras saat marah","Tidak pernah dipakai sama sekali"],"a":1,"exp":"Klakson adalah alat peringatan, bukan alat pelampiasan emosi. Bunyikan seperlunya dan hindari area sensitif.","ref":"Etika berkendara"},
+    {"id":51,"cat":"teknis","q":"Jika rem terasa blong saat berkendara, tindakan pertama yang paling tepat adalah...","opts":["Tarik rem tangan sekuat-kuatnya seketika","Turunkan gigi (engine brake), pompa rem, dan arahkan kendaraan ke tempat aman","Matikan mesin seketika","Lompat keluar dari kendaraan"],"a":1,"exp":"Turunkan gigi untuk memperlambat, pompa pedal rem, gunakan rem tangan bertahap, dan arahkan ke tempat aman.","ref":"Teknis kendaraan — darurat"},
+    {"id":52,"cat":"teknis","q":"Ban yang sudah botak (kembangan habis) berbahaya karena...","opts":["Boros bensin","Daya cengkeram berkurang dan risiko selip/aquaplaning meningkat","Suara mesin kasar","Lampu redup"],"a":1,"exp":"Kembangan ban membuang air dan mencengkeram aspal; ban botak mudah selip, terutama di jalan basah.","ref":"Teknis kendaraan — ban"},
+    {"id":53,"cat":"teknis","q":"Lampu rem yang mati harus segera diperbaiki karena...","opts":["Aki cepat habis","Kendaraan di belakang tidak tahu kamu sedang mengerem","Bensin boros","Suara klakson hilang"],"a":1,"exp":"Lampu rem adalah satu-satunya isyarat pengereman bagi kendaraan di belakang; matinya lampu rem memicu tabrakan beruntun.","ref":"Teknis kendaraan — lampu"},
+    {"id":54,"cat":"teknis","q":"Kapan spion kendaraan sebaiknya diatur?","opts":["Saat sedang berkendara kencang","Sebelum mulai berkendara, dari posisi duduk normal","Tidak perlu diatur","Hanya saat hujan"],"a":1,"exp":"Atur spion sebelum jalan dari posisi dudukmu, dan cek berkala saat berkendara untuk memantau sekitar.","ref":"Teknis kendaraan — spion"},
+    {"id":55,"cat":"teknis","q":"Jika kendaraan mogok di jalan tol, tindakan yang benar adalah...","opts":["Memperbaiki sendiri di lajur tengah","Menepi ke bahu jalan, nyalakan hazard, pasang segitiga pengaman, hubungi petugas tol (14080)","Berhenti di lajur dan menunggu bantuan","Mendorong kendaraan di lajur"],"a":1,"exp":"Menepi ke bahu jalan, nyalakan hazard, pasang segitiga pengaman, lalu hubungi petugas tol di 14080.","ref":"Keselamatan di jalan tol"},
+    {"id":56,"cat":"teknis","q":"Segitiga pengaman sebaiknya dipasang pada jarak...","opts":["5 meter di belakang kendaraan","10 meter di belakang kendaraan","Sekitar 50 meter di belakang kendaraan","100 meter di belakang kendaraan"],"a":2,"exp":"Segitiga pengaman dipasang cukup jauh (sekitar 50 meter) agar pengendara lain sempat bereaksi dan menghindar.","ref":"Keselamatan berkendara"},
+    {"id":57,"cat":"teknis","q":"Oli mesin sebaiknya diperiksa secara berkala karena...","opts":["Oli yang habis atau kotor dapat merusak mesin","Oli membuat bensin boros","Oli tidak ada hubungannya dengan mesin","Oli hanya untuk motor baru"],"a":0,"exp":"Oli melumasi dan mendinginkan mesin; kekurangan atau kekotoran oli mempercepat keausan dan kerusakan mesin.","ref":"Teknis kendaraan — oli"},
+    {"id":58,"cat":"teknis","q":"Tanda aki kendaraan mulai lemah adalah...","opts":["Starter berat dan lampu redup","Ban cepat habis","Rem berbunyi","Klakson terlalu keras"],"a":0,"exp":"Starter yang berat dan lampu yang redup menandakan aki soak; periksa dan ganti sebelum mogok di jalan.","ref":"Teknis kendaraan — aki"},
+    {"id":59,"cat":"teknis","q":"Jika indikator suhu mesin menunjukkan overheat (terlalu panas), yang harus dilakukan adalah...","opts":["Terus melaju agar cepat sampai","Berhenti, matikan mesin, dan jangan membuka tutup radiator saat masih panas","Menyiram mesin dengan air dingin seketika","Menambah kecepatan agar angin mendinginkan mesin"],"a":1,"exp":"Berhenti dan dinginkan mesin. Tutup radiator panas bertekanan tinggi — membukanya bisa menyemburkan uap panas.","ref":"Teknis kendaraan — radiator"},
+    {"id":60,"cat":"teknis","q":"Sabuk pengaman wajib dipakai oleh...","opts":["Pengemudi saja","Pengemudi dan penumpang kursi depan","Hanya penumpang belakang","Tidak wajib dipakai"],"a":1,"exp":"Pasal 106 ayat 6 UU 22/2009: pengemudi dan penumpang kendaraan roda empat wajib mengenakan sabuk keselamatan.","ref":"UU 22/2009 Pasal 106"}
+    ];
+
+    const CATEGORIES = [
+      {id:"rambu",    name:"Rambu Lalu Lintas",            desc:"Kenali arti rambu peringatan, larangan, perintah, dan petunjuk."},
+      {id:"marka",    name:"Marka Jalan",                  desc:"Garis utuh, putus-putus, zebra cross, sampai kotak kuning."},
+      {id:"peraturan",name:"Peraturan & UU 22/2009",       desc:"Batas kecepatan, hak utama, dan sanksi pelanggaran."},
+      {id:"etika",    name:"Etika & Keselamatan",          desc:"Jarak aman, lampu, hujan, kantuk, dan sopan santun di jalan."},
+      {id:"teknis",   name:"Teknis Kendaraan & Darurat",   desc:"Rem blong, ban botak, mogok di tol, dan overheat."}
+    ];
+    const CAT_NAME = {}; CATEGORIES.forEach(c=>CAT_NAME[c.id]=c.name);
+
+    /* Soal yang menampilkan gambar rambu di atas pertanyaan */
+    const Q_SIGN = {1:"batas40",3:"beri-kesempatan",4:"dilarang-masuk",5:"wajib-kiri",7:"dilarang-parkir",
+      8:"dilarang-berhenti",9:"penyeberangan",10:"menyempit",11:"motor-dilarang",13:"perlintasan-ka",
+      14:"wajib-bundaran"};
+    /* ================= SVG RAMBU (original, dari bentuk dasar) ================= */
+    const INK = "#15181D";
+    function warnTri(inner){
+      return '<svg viewBox="0 0 120 108" role="img" aria-hidden="true"><path d="M60 8 L114 100 Q116 104 111 104 L9 104 Q4 104 6 100 Z" fill="#FFC800" stroke="'+INK+'" stroke-width="5" stroke-linejoin="round"/>'+inner+'</svg>';
+    }
+    function banCircle(inner,fill){
+      return '<svg viewBox="0 0 120 120" role="img" aria-hidden="true"><circle cx="60" cy="60" r="54" fill="'+(fill||"#FFFFFF")+'" stroke="#E5484D" stroke-width="11"/>'+inner+'</svg>';
+    }
+    function cmdCircle(inner){
+      return '<svg viewBox="0 0 120 120" role="img" aria-hidden="true"><circle cx="60" cy="60" r="55" fill="#2563EB" stroke="#FFFFFF" stroke-width="3"/>'+inner+'</svg>';
+    }
+    function infoSquare(inner,bg){
+      return '<svg viewBox="0 0 120 120" role="img" aria-hidden="true"><rect x="7" y="7" width="106" height="106" rx="10" fill="'+(bg||"#2563EB")+'" stroke="#FFFFFF" stroke-width="3"/>'+inner+'</svg>';
+    }
+    const slash = '<line x1="26" y1="94" x2="94" y2="26" stroke="#E5484D" stroke-width="10" stroke-linecap="round"/>';
+    const arrowR = function(c){return '<path d="M34 50 L66 50 L66 38 L90 60 L66 82 L66 70 L34 70 Z" fill="'+c+'"/>';};
+    const arrowL = function(c){return '<path d="M86 50 L54 50 L54 38 L30 60 L54 82 L54 70 L86 70 Z" fill="'+c+'"/>';};
+    const arrowU = function(c){return '<path d="M50 86 L50 54 L38 54 L60 30 L82 54 L70 54 L70 86 Z" fill="'+c+'"/>';};
+    const turnR = function(c){return '<path d="M42 92 L42 62 Q42 46 58 46 L66 46 L66 34 L88 56 L66 78 L66 64 L58 64 Q56 64 56 66 L56 92 Z" fill="'+c+'"/>';};
+    const turnL = function(c){return '<path d="M78 92 L78 62 Q78 46 62 46 L54 46 L54 34 L32 56 L54 78 L54 64 L62 64 Q64 64 64 66 L64 92 Z" fill="'+c+'"/>';};
+    const uturn = function(c){return '<path d="M45 88 L45 47 Q45 31 60 31 Q75 31 75 47 L75 62" fill="none" stroke="'+c+'" stroke-width="10"/><path d="M64 58 L86 58 L75 78 Z" fill="'+c+'"/>';};
+    function person(x,y,s,c){
+      return '<g transform="translate('+x+' '+y+') scale('+s+')" stroke="'+c+'" stroke-width="6" stroke-linecap="round" fill="none">'
+        +'<circle cx="0" cy="-26" r="6.5" fill="'+c+'" stroke="none"/>'
+        +'<path d="M0 -18 L-2 2 M0 -12 L-13 -4 M-2 -10 L11 -14 M-2 2 L-11 20 M-2 2 L10 16"/></g>';
+    }
+    function carFront(x,y,s,c,glass){
+      return '<g transform="translate('+x+' '+y+') scale('+s+')">'
+        +'<path d="M-24 12 L-20 -6 Q-19 -12 -12 -12 L12 -12 Q19 -12 20 -6 L24 12 L24 20 Q24 23 21 23 L16 23 Q13 23 13 20 L13 17 L-13 17 L-13 20 Q-13 23 -16 23 L-21 23 Q-24 23 -24 20 Z" fill="'+c+'"/>'
+        +'<rect x="-13" y="-8" width="26" height="9" rx="2" fill="'+glass+'"/>'
+        +'<circle cx="-16" cy="10" r="3.4" fill="'+glass+'"/><circle cx="16" cy="10" r="3.4" fill="'+glass+'"/></g>';
+    }
+    function moto(c){
+      return '<g stroke="'+c+'" stroke-width="5.5" fill="none" stroke-linecap="round" stroke-linejoin="round">'
+        +'<circle cx="36" cy="82" r="13"/><circle cx="86" cy="82" r="13"/>'
+        +'<path d="M36 82 L52 54 L70 54 L86 82 M52 54 L46 40 L60 40 M70 54 L78 40 L88 40 M46 68 L64 68"/></g>';
+    }
+    function busShape(x,y,s,c,glass){
+      return '<g transform="translate('+x+' '+y+') scale('+s+')">'
+        +'<rect x="-22" y="-26" width="44" height="48" rx="7" fill="'+c+'"/>'
+        +'<rect x="-16" y="-20" width="32" height="14" rx="3" fill="'+glass+'"/>'
+        +'<circle cx="-13" cy="4" r="3.6" fill="'+glass+'"/><circle cx="13" cy="4" r="3.6" fill="'+glass+'"/>'
+        +'<rect x="-14" y="14" width="28" height="4" rx="2" fill="'+glass+'"/></g>';
+    }
+    function roundaboutArrows(c){
+      let s='<defs><marker id="rah" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 Z" fill="'+c+'"/></marker></defs>';
+      for(let k=0;k<3;k++){
+        s+='<path d="M60 32 A28 28 0 0 1 84 74" fill="none" stroke="'+c+'" stroke-width="8" marker-end="url(#rah)" transform="rotate('+(k*120)+' 60 60)"/>';
+      }
+      return s;
+    }
+
+    const SIGN_ART = {
+      /* --- PERINGATAN --- */
+      "tikungan-tajam": ()=>warnTri('<path d="M44 84 L44 62 Q44 48 58 48 L64 48" fill="none" stroke="'+INK+'" stroke-width="8"/><path d="M64 36 L82 52 L62 56 L66 48 Z" fill="'+INK+'"/>'),
+      "tikungan-ganda": ()=>warnTri('<path d="M50 86 C72 74 46 62 66 46" fill="none" stroke="'+INK+'" stroke-width="7.5" stroke-linecap="round"/><path d="M66 34 L74 50 L58 50 Z" fill="'+INK+'"/>'),
+      "jalan-licin": ()=>warnTri(carFront(56,66,0.82,INK,"#FFC800")+'<path d="M26 92 Q36 86 44 92 T62 92" fill="none" stroke="'+INK+'" stroke-width="4.5" stroke-linecap="round"/><path d="M58 92 Q68 86 76 92 T92 92" fill="none" stroke="'+INK+'" stroke-width="4.5" stroke-linecap="round"/>'),
+      "menyempit": ()=>warnTri('<path d="M38 34 L50 62 L38 92 M82 34 L70 62 L82 92" fill="none" stroke="'+INK+'" stroke-width="7" stroke-linecap="round"/>'),
+      "jembatan-sempit": ()=>warnTri('<path d="M32 40 L48 62 L32 86 M88 40 L72 62 L88 86" fill="none" stroke="'+INK+'" stroke-width="6.5" stroke-linecap="round"/><path d="M32 40 H48 M32 86 H48 M72 40 H88 M72 86 H88" stroke="'+INK+'" stroke-width="6.5" stroke-linecap="round"/>'),
+      "turunan-curam": ()=>warnTri('<text x="57" y="45" text-anchor="middle" font-family="Inter,sans-serif" font-weight="800" font-size="16" fill="'+INK+'">10%</text><path d="M28 58 L94 82 L94 90 L28 72 Z" fill="'+INK+'"/>'),
+      "penyeberangan": ()=>warnTri(person(58,58,0.95,INK)+'<path d="M28 92 H46 M54 92 H72 M80 92 H94" stroke="'+INK+'" stroke-width="5" stroke-linecap="round"/>'),
+      "anak-sekolah": ()=>warnTri(person(46,62,0.78,INK)+person(74,62,0.66,INK)),
+      "persimpangan": ()=>warnTri('<path d="M60 34 V92 M36 62 H84" stroke="'+INK+'" stroke-width="9" stroke-linecap="round"/>'),
+      "lampu-ll": ()=>warnTri('<rect x="48" y="32" width="24" height="58" rx="7" fill="'+INK+'"/><circle cx="60" cy="45" r="6" fill="#E5484D"/><circle cx="60" cy="61" r="6" fill="#FFC800" stroke="#FFFFFF" stroke-width="1.4"/><circle cx="60" cy="77" r="6" fill="#2FBF71"/>'),
+      "perlintasan-ka": ()=>warnTri('<g><rect x="40" y="38" width="40" height="34" rx="5" fill="'+INK+'"/><rect x="46" y="44" width="28" height="11" rx="2" fill="#FFC800"/><circle cx="49" cy="63" r="3.4" fill="#FFC800"/><circle cx="71" cy="63" r="3.4" fill="#FFC800"/><path d="M38 84 L52 72 M82 84 L68 72 M34 92 H86" stroke="'+INK+'" stroke-width="4.5" stroke-linecap="round"/></g>'),
+      "bergelombang": ()=>warnTri('<path d="M26 68 Q40 50 54 68 T82 68 T104 62" fill="none" stroke="'+INK+'" stroke-width="7" stroke-linecap="round" transform="translate(-4 6)"/>'),
+      /* --- LARANGAN --- */
+      "dilarang-masuk": ()=>'<svg viewBox="0 0 120 120" role="img" aria-hidden="true"><circle cx="60" cy="60" r="55" fill="#E5484D"/><rect x="26" y="50" width="68" height="20" rx="3" fill="#FFFFFF"/></svg>',
+      "dilarang-belok-kanan": ()=>banCircle(turnR(INK)+slash),
+      "dilarang-belok-kiri": ()=>banCircle(turnL(INK)+slash),
+      "dilarang-putar-balik": ()=>banCircle(uturn(INK)+slash),
+      "batas40": ()=>banCircle('<text x="60" y="78" text-anchor="middle" font-family="Barlow Condensed,Inter,sans-serif" font-weight="700" font-size="52" fill="'+INK+'">40</text>'),
+      "dilarang-parkir": ()=>banCircle('<text x="60" y="82" text-anchor="middle" font-family="Inter,sans-serif" font-weight="800" font-size="58" fill="#FFFFFF">P</text>'+slash,"#2563EB"),
+      "dilarang-berhenti": ()=>banCircle('<text x="60" y="82" text-anchor="middle" font-family="Inter,sans-serif" font-weight="800" font-size="58" fill="#FFFFFF">S</text>'+slash+'<line x1="94" y1="94" x2="26" y2="26" stroke="#E5484D" stroke-width="10" stroke-linecap="round"/>',"#2563EB"),
+      "dilarang-mendahului": ()=>banCircle(carFront(40,58,0.8,"#E5484D","#FFFFFF")+carFront(80,58,0.8,INK,"#FFFFFF")),
+      "motor-dilarang": ()=>banCircle(moto(INK)+slash),
+      "dilarang-klakson": ()=>banCircle('<path d="M32 52 L46 52 L64 38 L64 82 L46 68 L32 68 Z" fill="'+INK+'"/><path d="M74 48 Q82 60 74 72 M82 42 Q94 60 82 78" fill="none" stroke="'+INK+'" stroke-width="5" stroke-linecap="round"/>'+slash),
+      /* --- PERINTAH --- */
+      "wajib-kiri": ()=>cmdCircle(arrowL("#FFFFFF")),
+      "wajib-kanan": ()=>cmdCircle(arrowR("#FFFFFF")),
+      "wajib-lurus": ()=>cmdCircle(arrowU("#FFFFFF")),
+      "wajib-bundaran": ()=>cmdCircle(roundaboutArrows("#FFFFFF")),
+      "wajib-lampu": ()=>cmdCircle('<path d="M30 38 A26 26 0 0 0 30 82 Z" fill="#FFFFFF"/><path d="M62 44 H84 M64 60 H88 M62 76 H84" stroke="#FFFFFF" stroke-width="6.5" stroke-linecap="round"/>'),
+      "lajur-bus": ()=>cmdCircle(busShape(60,58,0.95,"#FFFFFF","#2563EB")+'<text x="60" y="102" text-anchor="middle" font-family="Inter,sans-serif" font-weight="800" font-size="14" fill="#FFFFFF">BUS</text>'),
+      "beri-kesempatan": ()=>'<svg viewBox="0 0 120 108" role="img" aria-hidden="true"><path d="M60 100 L8 16 Q6 10 13 10 L107 10 Q114 10 112 16 Z" fill="#FFFFFF" stroke="#E5484D" stroke-width="9" stroke-linejoin="round"/></svg>',
+      /* --- PETUNJUK --- */
+      "parkir": ()=>infoSquare('<text x="60" y="88" text-anchor="middle" font-family="Inter,sans-serif" font-weight="800" font-size="66" fill="#FFFFFF">P</text>'),
+      "rumah-sakit": ()=>infoSquare('<text x="60" y="88" text-anchor="middle" font-family="Inter,sans-serif" font-weight="800" font-size="66" fill="#FFFFFF">H</text>'),
+      "spbu": ()=>infoSquare('<g fill="#FFFFFF"><rect x="36" y="30" width="34" height="60" rx="4"/><rect x="43" y="38" width="20" height="16" rx="2" fill="#2563EB"/><path d="M70 48 L82 40 Q88 44 86 56 L84 74 Q84 80 78 80 L74 80" fill="none" stroke="#FFFFFF" stroke-width="6"/></g>',"#1E9E57"),
+      "halte": ()=>infoSquare(busShape(60,56,1.0,"#FFFFFF","#2563EB")+'<text x="60" y="102" text-anchor="middle" font-family="Inter,sans-serif" font-weight="800" font-size="13" fill="#FFFFFF">HALTE</text>'),
+      "jalan-tol": ()=>infoSquare('<path d="M44 92 L54 34 M76 92 L66 34 M32 34 H88" stroke="#FFFFFF" stroke-width="6" fill="none" stroke-linecap="round"/><path d="M60 44 V54 M60 64 V76" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round"/>',"#1E9E57"),
+      "arah-kota": ()=>infoSquare('<path d="M22 74 V52 L34 40 L46 52 V74 M52 74 V58 L64 48 L76 58 V74 M82 74 V50 L92 42 L100 50 V74" fill="none" stroke="#FFFFFF" stroke-width="5" stroke-linejoin="round"/><path d="M20 92 H102" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round"/>',"#1E9E57")
+    };
+    function signSVG(key){ const f = SIGN_ART[key]; return f ? f() : ""; }
+
+    const SIGN_GROUPS = [
+      {id:"peringatan", name:"Peringatan"},
+      {id:"larangan",   name:"Larangan"},
+      {id:"perintah",   name:"Perintah"},
+      {id:"petunjuk",   name:"Petunjuk"}
+    ];
+    const SIGNS = [
+      {key:"tikungan-tajam", g:"peringatan", name:"Tikungan Tajam", arti:"Di depan ada tikungan tajam. Kurangi kecepatan sebelum masuk tikungan dan jangan mendahului.", contoh:"Jalan pegunungan berkelok — turunkan kecepatan dan tetap di jalurmu, jangan memotong tikungan."},
+      {key:"tikungan-ganda", g:"peringatan", name:"Tikungan Ganda", arti:"Di depan ada dua tikungan berurutan berlawanan arah, seperti huruf S.", contoh:"Setelah tikungan pertama langsung disambut tikungan sebaliknya; jaga kecepatan tetap rendah sampai jalan lurus."},
+      {key:"jalan-licin", g:"peringatan", name:"Jalan Licin", arti:"Permukaan jalan licin sehingga kendaraan mudah tergelincir, terutama saat pengereman.", contoh:"Hujan baru turun dan aspal mengkilap — kurangi kecepatan dan hindari rem mendadak."},
+      {key:"menyempit", g:"peringatan", name:"Jalan Menyempit", arti:"Lebar jalan menyempit di kedua sisi. Kendaraan perlu bergantian dan lebih berhati-hati.", contoh:"Ada perbaikan jalan di depan; lajur menyempit, beri kesempatan kendaraan dari arah berlawanan."},
+      {key:"jembatan-sempit", g:"peringatan", name:"Jembatan Sempit", arti:"Di depan ada jembatan sempit yang mungkin hanya cukup untuk satu kendaraan.", contoh:"Jembatan desa yang sempit — tunggu kendaraan dari seberang lewat dulu sebelum menyeberang."},
+      {key:"turunan-curam", g:"peringatan", name:"Turunan Curam", arti:"Di depan ada turunan curam. Gunakan gigi rendah agar kendaraan tidak meluncur bebas.", contoh:"Turunan panjang di pegunungan — pakai engine brake supaya rem tidak kepanasan dan blong."},
+      {key:"penyeberangan", g:"peringatan", name:"Penyeberangan Pejalan Kaki", arti:"Di depan ada tempat penyeberangan atau banyak pejalan kaki. Pejalan kaki harus didahulukan.", contoh:"Dekat pasar yang ramai — kurangi kecepatan dan siap berhenti bila ada yang menyeberang."},
+      {key:"anak-sekolah", g:"peringatan", name:"Anak Sekolah", arti:"Kawasan sekolah. Anak-anak bisa menyeberang atau muncul tiba-tiba dari tepi jalan.", contoh:"Jam pulang sekolah pukul 12.00 — pelankan kendaraan saat melewati gerbang sekolah."},
+      {key:"persimpangan", g:"peringatan", name:"Persimpangan", arti:"Di depan ada persimpangan jalan. Kurangi kecepatan dan perhatikan kendaraan dari arah lain.", contoh:"Perempatan kampung tanpa lampu lalu lintas — tengok kanan-kiri sebelum melintas."},
+      {key:"lampu-ll", g:"peringatan", name:"Lampu Lalu Lintas di Depan", arti:"Di depan ada persimpangan yang dilengkapi lampu lalu lintas (APILL).", contoh:"Lampu merah tersembunyi di balik tikungan — bersiap berhenti sejak melihat rambu ini."},
+      {key:"perlintasan-ka", g:"peringatan", name:"Perlintasan Kereta Api", arti:"Di depan ada perlintasan sebidang dengan rel kereta api. Berhenti dan pastikan tidak ada kereta melintas.", contoh:"Palang perlintasan belum turun tapi sirene berbunyi — berhenti dan tengok kanan-kiri."},
+      {key:"bergelombang", g:"peringatan", name:"Jalan Bergelombang", arti:"Permukaan jalan di depan tidak rata atau bergelombang sehingga kendaraan bisa oleng.", contoh:"Jalan rusak bergelombang — kurangi kecepatan agar tidak kehilangan kendali."},
+      {key:"dilarang-masuk", g:"larangan", name:"Dilarang Masuk", arti:"Kendaraan dari arah ini dilarang masuk ke jalan tersebut.", contoh:"Mulut jalan satu arah dari sisi berlawanan — jangan masuk meski jalan tampak sepi."},
+      {key:"dilarang-belok-kanan", g:"larangan", name:"Dilarang Belok Kanan", arti:"Pengemudi dilarang berbelok ke kanan di persimpangan ini.", contoh:"Di perempatan padat, belok kanan dilarang demi kelancaran — terus lurus dan putar di tempat yang diizinkan."},
+      {key:"dilarang-belok-kiri", g:"larangan", name:"Dilarang Belok Kiri", arti:"Pengemudi dilarang berbelok ke kiri di persimpangan ini.", contoh:"Jalan keluar tol satu arah — belok kiri dilarang, ikuti arus lurus."},
+      {key:"dilarang-putar-balik", g:"larangan", name:"Dilarang Putar Balik", arti:"Kendaraan dilarang berbalik arah (U-turn) di ruas jalan ini.", contoh:"Di jalan arteri yang ramai, putar balik dilarang karena membahayakan arus kendaraan."},
+      {key:"batas40", g:"larangan", name:"Batas Kecepatan 40 km/jam", arti:"Kecepatan maksimum yang diperbolehkan di ruas ini adalah 40 km/jam.", contoh:"Memasuki kawasan sekolah atau permukiman — jaga kecepatan di bawah 40 km/jam."},
+      {key:"dilarang-parkir", g:"larangan", name:"Dilarang Parkir", arti:"Kendaraan dilarang parkir di area ini, walau pengemudi tetap di dalam kendaraan.", contoh:"Di depan pintu masuk rumah sakit — jangan parkir, kendaraanmu bisa diderek."},
+      {key:"dilarang-berhenti", g:"larangan", name:"Dilarang Berhenti", arti:"Kendaraan dilarang berhenti sama sekali di area ini, termasuk berhenti sejenak.", contoh:"Di jembatan atau tikungan — berhenti sebentar saja untuk menurunkan penumpang tetap dilarang."},
+      {key:"dilarang-mendahului", g:"larangan", name:"Dilarang Mendahului", arti:"Kendaraan dilarang mendahului kendaraan lain di ruas jalan ini.", contoh:"Di tikungan dan tanjakan dengan jarak pandang terbatas — sabar di belakang sampai rambu berakhir."},
+      {key:"motor-dilarang", g:"larangan", name:"Sepeda Motor Dilarang Masuk", arti:"Sepeda motor dilarang masuk atau melintasi jalan ini.", contoh:"Gerbang jalan tol dan jalan layang tertentu — pengendara motor wajib lewat jalan biasa."},
+      {key:"dilarang-klakson", g:"larangan", name:"Dilarang Membunyikan Klakson", arti:"Pengemudi dilarang membunyikan klakson di area ini.", contoh:"Melewati rumah sakit atau sekolah saat jam belajar — cukup kurangi kecepatan, jangan bunyikan klakson."},
+      {key:"wajib-kiri", g:"perintah", name:"Wajib Belok Kiri", arti:"Pengemudi wajib mengikuti arah panah, yaitu berbelok ke kiri.", contoh:"Di persimpangan satu arah, semua kendaraan wajib belok kiri mengikuti rambu."},
+      {key:"wajib-kanan", g:"perintah", name:"Wajib Belok Kanan", arti:"Pengemudi wajib mengikuti arah panah, yaitu berbelok ke kanan.", contoh:"Jalan lurus ditutup untuk perbaikan — semua kendaraan diarahkan belok kanan."},
+      {key:"wajib-lurus", g:"perintah", name:"Wajib Lurus", arti:"Pengemudi wajib berjalan lurus; berbelok di titik ini tidak diperbolehkan.", contoh:"Di persimpangan dengan rambu ini, kendaraan tidak boleh belok kanan maupun kiri."},
+      {key:"wajib-bundaran", g:"perintah", name:"Wajib Mengikuti Bundaran", arti:"Pengemudi wajib mengikuti arah putaran bundaran (roundabout) sesuai panah.", contoh:"Memasuki bundaran HI — ikut arus memutar dan beri jalan kendaraan yang sudah di dalam bundaran."},
+      {key:"wajib-lampu", g:"perintah", name:"Wajib Menyalakan Lampu", arti:"Pengemudi wajib menyalakan lampu kendaraan di ruas ini.", contoh:"Memasuki terowongan — nyalakan lampu utama agar terlihat oleh kendaraan lain."},
+      {key:"lajur-bus", g:"perintah", name:"Lajur Khusus Bus", arti:"Lajur ini khusus untuk bus; kendaraan lain tidak boleh memasukinya.", contoh:"Jalur Transjakarta di koridor busway — mobil dan motor wajib tetap di lajur biasa."},
+      {key:"parkir", g:"petunjuk", name:"Tempat Parkir", arti:"Petunjuk lokasi tempat parkir kendaraan.", contoh:"Huruf P ini terlihat di dekat mal atau terminal — di sanalah kendaraan boleh diparkir."},
+      {key:"rumah-sakit", g:"petunjuk", name:"Rumah Sakit", arti:"Petunjuk lokasi rumah sakit terdekat.", contoh:"Saat membawa orang sakit, ikuti rambu H ini untuk menemukan rumah sakit."},
+      {key:"spbu", g:"petunjuk", name:"SPBU", arti:"Petunjuk lokasi stasiun pengisian bahan bakar umum.", contoh:"Bensin hampir habis di perjalanan jauh — rambu ini menunjukkan SPBU ada di dekat sini."},
+      {key:"halte", g:"petunjuk", name:"Halte Bus", arti:"Petunjuk lokasi halte, tempat bus berhenti menaikkan dan menurunkan penumpang.", contoh:"Penumpang menunggu bus di titik ini; pengemudi lain jangan berhenti menghalangi halte."},
+      {key:"jalan-tol", g:"petunjuk", name:"Jalan Tol", arti:"Petunjuk arah menuju atau berada di jalan tol (jalan bebas hambatan).", contoh:"Rambu hijau ini muncul menjelang gerbang tol — siapkan kartu e-toll sebelum masuk."},
+      {key:"arah-kota", g:"petunjuk", name:"Arah Kota", arti:"Papan petunjuk arah dan kawasan perkotaan atau tujuan berikutnya.", contoh:"Di persimpangan besar, rambu hijau ini membantu memilih arah menuju kota tujuanmu."}
+    ];
+    const SIGN_BY_KEY = {}; SIGNS.forEach(s=>SIGN_BY_KEY[s.key]=s);
+    const GROUP_NAME = {}; SIGN_GROUPS.forEach(g=>GROUP_NAME[g.id]=g.name);
+    </script>
+    <script>
+    "use strict";
+    /* ================= STORE (localStorage: lulus-sim-v1) ================= */
+    const LS_KEY = "lulus-sim-v1";
+    function defaultStore(){
+      const cats = {}; CATEGORIES.forEach(c=>cats[c.id]={a:0,c:0});
+      return { totalAnswered:0, totalCorrect:0, cats:cats, exams:[], days:{} };
+    }
+    const Store = {
+      data: null,
+      load(){
+        try{
+          const raw = localStorage.getItem(LS_KEY);
+          if(raw){ const d = JSON.parse(raw); if(d && typeof d==="object"){ this.data = Object.assign(defaultStore(), d); return; } }
+        }catch(e){ /* abaikan, pakai data kosong */ }
+        this.data = defaultStore();
+      },
+      save(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(this.data)); }catch(e){ /* penyimpanan tidak tersedia */ } },
+      reset(){ this.data = defaultStore(); try{ localStorage.removeItem(LS_KEY); }catch(e){} },
+      recordAnswer(cat, correct){
+        const d = this.data;
+        d.totalAnswered++; if(correct) d.totalCorrect++;
+        if(!d.cats[cat]) d.cats[cat] = {a:0,c:0};
+        d.cats[cat].a++; if(correct) d.cats[cat].c++;
+        d.days[todayKey()] = true;
+        this.save();
+      },
+      recordExam(entry){
+        this.data.exams.unshift(entry);
+        this.data.days[todayKey()] = true;
+        this.save();
+      }
+    };
+    function todayKey(offsetDays){
+      const d = new Date(); if(offsetDays) d.setDate(d.getDate()+offsetDays);
+      return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+    }
+    function calcStreak(days){
+      let streak = 0;
+      let start = days[todayKey(0)] ? 0 : (days[todayKey(-1)] ? -1 : null);
+      if(start === null) return 0;
+      for(let i = start; ; i--){ if(days[todayKey(i)]) streak++; else break; }
+      return streak;
+    }
+    function accuracyOf(a, c){ return a > 0 ? Math.round(c / a * 100) : 0; }
+
+    /* ================= STATE ================= */
+    const state = {
+      screen: "home",
+      practice: null,   /* {cat, queue:[{q, order:[optIdx...], correctPos}], idx, picked, score} */
+      exam: null,       /* {items, idx, answers:[], flags:[], remain, timerId, startedAt} */
+      result: null,     /* hasil ujian terakhir */
+      kamusFilter: "semua",
+      gridOpen: true
+    };
+
+    /* ================= HELPERS ================= */
+    const view = document.getElementById("view");
+    const modalRoot = document.getElementById("modal-root");
+    function esc(s){ return String(s).replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch])); }
+    function shuffle(arr){
+      const a = arr.slice();
+      for(let i = a.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); const t = a[i]; a[i] = a[j]; a[j] = t; }
+      return a;
+    }
+    function fmtTime(totalSec){
+      const s = Math.max(0, Math.floor(totalSec));
+      return String(Math.floor(s / 60)).padStart(2,"0") + ":" + String(s % 60).padStart(2,"0");
+    }
+    function fmtDate(ts){
+      return new Date(ts).toLocaleDateString("id-ID", {weekday:"short", day:"numeric", month:"short", year:"numeric"});
+    }
+    function prepareQuestion(q){
+      const order = shuffle([0,1,2,3]);
+      return { q:q, order:order, correctPos: order.indexOf(q.a) };
+    }
+    const ICONS = {
+      back:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5 L8 12 L15 19"/></svg>',
+      arrowR:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12 H19 M13 6 L19 12 L13 18"/></svg>',
+      book:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5 A2.5 2.5 0 0 1 6.5 3 H20 V21 H6.5 A2.5 2.5 0 0 0 4 18.5 Z"/><path d="M4 18.5 V5.5"/><path d="M8.5 7.5 H16"/></svg>',
+      clip:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4.5" width="14" height="17" rx="2"/><path d="M9 4.5 a3 3 0 0 1 6 0"/><path d="M9 13.5 L11.2 15.7 L15.5 11.5"/></svg>',
+      warn:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5 L22 20.5 H2 Z"/><path d="M12 10 V14.5"/><circle cx="12" cy="17.4" r="0.6" fill="currentColor"/></svg>',
+      flag:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21 V4"/><path d="M5 4.5 C8 3 10.5 5.5 14 4.5 L19 3 V13 L14 14.5 C10.5 15.5 8 13 5 14.5" fill="currentColor" stroke="none"/></svg>',
+      check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.5 L9.5 17.5 L19.5 6.5"/></svg>'
+    };
+    const TABS = [
+      {id:"home",   label:"Beranda",  icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11 L12 4 L20 11"/><path d="M6 9.5 V20 H18 V9.5"/><path d="M10 20 V14.5 H14 V20"/></svg>'},
+      {id:"latihan",label:"Latihan",  icon:ICONS.book},
+      {id:"ujian",  label:"Ujian",    icon:ICONS.clip},
+      {id:"kamus",  label:"Rambu",    icon:ICONS.warn},
+      {id:"statistik",label:"Statistik",icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><path d="M5 20 V11 M12 20 V4.5 M19 20 V8"/></svg>'}
+    ];
+    function renderTabs(){
+      const active = {home:"home", latihan:"latihan", practice:"latihan", "ujian-intro":"ujian",
+        exam:"ujian", result:"ujian", kamus:"kamus", statistik:"statistik"}[state.screen] || "home";
+      document.getElementById("tabbar").innerHTML = TABS.map(t =>
+        '<button class="tab'+(t.id===active?" on":"")+'" data-tab="'+t.id+'" aria-label="'+t.label+'">'+t.icon+'<span>'+t.label+'</span></button>'
+      ).join("");
+      document.querySelectorAll("[data-tab]").forEach(b => b.addEventListener("click", () => goTab(b.dataset.tab)));
+    }
+    function goTab(tab){
+      if(state.screen === "exam" && tab !== "ujian"){ confirmLeaveExam(() => nav(tab)); return; }
+      nav(tab === "ujian" ? "ujian-intro" : tab);
+    }
+    function nav(screen){
+      stopExamTimer();
+      state.screen = screen;
+      render();
+      window.scrollTo(0,0);
+    }
+    function render(){
+      renderTabs();
+      const r = { home:renderHome, latihan:renderLatihan, practice:renderPractice,
+        "ujian-intro":renderUjianIntro, exam:renderExam, result:renderResult,
+        kamus:renderKamus, statistik:renderStatistik }[state.screen];
+      view.innerHTML = '<div class="screen">' + (r ? r() : "") + '</div>';
+      bindScreen();
+    }
+    function bindScreen(){
+      const b = { home:bindHome, latihan:bindLatihan, practice:bindPractice,
+        "ujian-intro":bindUjianIntro, exam:bindExam, result:bindResult,
+        kamus:bindKamus, statistik:bindStatistik }[state.screen];
+      if(b) b();
+    }
+    function openModal(html){
+      modalRoot.innerHTML = '<div class="overlay" id="overlay"><div class="sheet" role="dialog" aria-modal="true">'+html+'</div></div>';
+      document.getElementById("overlay").addEventListener("click", e => { if(e.target.id === "overlay") closeModal(); });
+      modalRoot.querySelectorAll("[data-close]").forEach(b => b.addEventListener("click", closeModal));
+    }
+    function closeModal(){ modalRoot.innerHTML = ""; }
+
+    /* ================= BERANDA ================= */
+    function examSummaryHTML(e){
+      return '<div class="hist-row"><div class="when"><b>'+fmtDate(e.ts)+'</b><span>Benar '+e.correct+' dari '+e.total+' soal · '+fmtTime(e.secs)+'</span></div>'
+        +'<div class="score">'+e.score+'%</div><span class="badge '+(e.pass?"pass":"fail")+'">'+(e.pass?"Lulus":"Belum Lulus")+'</span></div>';
+    }
+    function renderHome(){
+      const d = Store.data;
+      const acc = accuracyOf(d.totalAnswered, d.totalCorrect);
+      const passed = d.exams.filter(e => e.pass).length;
+      const streak = calcStreak(d.days);
+      const last = d.exams[0];
+      return ''
+      + '<p class="tagline" style="font-weight:700;color:var(--yellow);letter-spacing:.08em;text-transform:uppercase;font-size:13px">Latihan Ujian Teori SIM A &amp; C</p>'
+      + '<h1 class="title">LULUS <span class="accent">SIM!</span></h1>'
+      + '<p class="tagline">Gas latihan dikit-dikit tiap hari, biar pas hari ujian kamu tinggal senyum. Semua soal bisa dipelajari per kategori, lengkap dengan penjelasan dan rujukan pasalnya.</p>'
+      + '<div class="stats">'
+      +   '<div class="stat"><div class="num">'+d.totalAnswered+'</div><div class="lbl">Soal sudah dijawab</div></div>'
+      +   '<div class="stat"><div class="num y">'+acc+'%</div><div class="lbl">Akurasi jawabanmu</div></div>'
+      +   '<div class="stat"><div class="num">'+passed+'</div><div class="lbl">Ujian simulasi lulus</div></div>'
+      +   '<div class="stat"><div class="num y">'+streak+'</div><div class="lbl">Hari latihan beruntun (streak)</div></div>'
+      + '</div>'
+      + '<div class="marka"></div>'
+      + '<div class="entries">'
+      +   '<button class="entry" id="go-latihan"><span class="ic y">'+ICONS.book+'</span><h3>Latihan</h3><p>Belajar per kategori, langsung tahu benar atau salah plus penjelasannya.</p><span class="go">Mulai latihan '+ICONS.arrowR+'</span></button>'
+      +   '<button class="entry" id="go-ujian"><span class="ic r">'+ICONS.clip+'</span><h3>Ujian Simulasi</h3><p>30 soal acak, waktu 15 menit. Lulus kalau benar minimal 70% (21 soal).</p><span class="go">Mulai ujian '+ICONS.arrowR+'</span></button>'
+      +   '<button class="entry" id="go-kamus"><span class="ic b">'+ICONS.warn+'</span><h3>Kamus Rambu</h3><p>34 rambu dalam 4 golongan, lengkap dengan arti dan contoh situasinya.</p><span class="go">Buka kamus '+ICONS.arrowR+'</span></button>'
+      + '</div>'
+      + '<h2 class="sec">Ujian Terakhir</h2>'
+      + (last ? examSummaryHTML(last)
+             : '<div class="empty">Belum ada riwayat ujian. Coba Ujian Simulasi pertamamu — santai saja, ini cuma latihan.</div>')
+      + '<div class="marka white"></div>'
+      + '<p class="disclaimer">Soal latihan — bukan soal resmi Korlantas Polri. Materi disusun dari UU 22/2009, Perpol 5/2021, dan panduan latihan ujian teori SIM.</p>';
+    }
+    function bindHome(){
+      document.getElementById("go-latihan").addEventListener("click", () => nav("latihan"));
+      document.getElementById("go-ujian").addEventListener("click", () => nav("ujian-intro"));
+      document.getElementById("go-kamus").addEventListener("click", () => nav("kamus"));
+    }
+
+    /* ================= LATIHAN ================= */
+    function renderLatihan(){
+      const d = Store.data;
+      const rows = CATEGORIES.map(c => {
+        const s = d.cats[c.id] || {a:0,c:0};
+        const acc = accuracyOf(s.a, s.c);
+        const total = QUESTIONS.filter(q => q.cat === c.id).length;
+        return '<button class="cat-row" data-cat="'+c.id+'"><h3>'+esc(c.name)+'</h3>'
+          + '<div class="meta">'+esc(c.desc)+'</div>'
+          + '<div class="meta" style="margin-top:8px">'+total+' soal · sudah dijawab '+s.a+' kali · akurasi <b style="color:var(--ink)">'+acc+'%</b></div>'
+          + '<div class="bar"><i class="'+(acc>=70?"g":"")+'" style="width:'+acc+'%"></i></div></button>';
+      }).join("");
+      return '<div class="page-head"><div><h2>Latihan</h2><div class="sub">Pilih satu kategori. Jawaban langsung dibahas, jadi kamu belajar sambil jalan.</div></div></div>' + rows;
+    }
+    function bindLatihan(){
+      document.querySelectorAll("[data-cat]").forEach(b => b.addEventListener("click", () => startPractice(b.dataset.cat)));
+    }
+    function startPractice(cat){
+      const pool = shuffle(QUESTIONS.filter(q => q.cat === cat)).map(prepareQuestion);
+      state.practice = { cat:cat, queue:pool, idx:0, picked:-1, score:0, done:false };
+      nav("practice");
+    }
+    function renderPractice(){
+      const p = state.practice;
+      if(!p) return '<div class="empty">Sesi latihan tidak ditemukan.</div>';
+      if(p.done){
+        const total = p.queue.length;
+        const pct = accuracyOf(total, p.score);
+        return '<div class="page-head"><div><h2>Sesi Selesai</h2><div class="sub">'+esc(CAT_NAME[p.cat])+'</div></div></div>'
+          + '<div class="card" style="text-align:center;padding:28px 18px">'
+          + '<div class="display" style="font-size:64px;font-weight:700;color:var(--yellow)">'+p.score+'<small style="font-size:30px;color:var(--muted)">/'+total+'</small></div>'
+          + '<p style="color:var(--muted);margin:6px 0 0">'+(pct>=70 ? "Mantap! Kategori ini sudah di atas ambang lulus. Pertahankan, ya." : "Nggak apa-apa, namanya juga latihan. Ulangi lagi pelan-pelan, penjelasannya yang bikin nempel.")+'</p></div>'
+          + '<div class="btn-row two"><button class="btn ghost" id="p-home">Ke Beranda</button><button class="btn" id="p-again">Latihan Lagi</button></div>'
+          + '<div class="btn-row"><button class="btn ghost" id="p-cats">Pilih Kategori Lain</button></div>';
+      }
+      const item = p.queue[p.idx];
+      const q = item.q;
+      const signKey = Q_SIGN[q.id];
+      const letters = ["A","B","C","D"];
+      const answered = p.picked >= 0;
+      let opts = item.order.map((origIdx, pos) => {
+        let cls = "opt";
+        if(answered){
+          if(pos === item.correctPos) cls += " correct";
+          else if(pos === p.picked) cls += " wrong";
+          else cls += " dim";
+        }
+        return '<button class="'+cls+'" data-opt="'+pos+'" '+(answered?"disabled":"")+'><span class="letter">'+letters[pos]+'</span><span>'+esc(q.opts[origIdx])+'</span></button>';
+      }).join("");
+      let feedback = "";
+      if(answered){
+        const ok = p.picked === item.correctPos;
+        feedback = '<div class="feedback '+(ok?"ok":"no")+'"><b class="head">'+(ok ? "Betul! Kerja bagus." : "Belum tepat — yang benar: "+letters[item.correctPos])+'</b>'
+          + esc(q.exp) + '<br/><span class="ref">'+esc(q.ref)+'</span></div>'
+          + '<div class="btn-row"><button class="btn" id="p-next">'+(p.idx === p.queue.length - 1 ? "Lihat Hasil Sesi" : "Soal Berikutnya")+'</button></div>';
+      }
+      return '<div class="page-head"><button class="back-btn" id="p-back">'+ICONS.back+' Kategori</button>'
+        + '<div><h2 style="font-size:26px">'+esc(CAT_NAME[p.cat])+'</h2><div class="sub">Mode latihan — tanpa timer, santai saja</div></div></div>'
+        + '<div class="progress-line"><i style="width:'+Math.round(p.idx / p.queue.length * 100)+'%"></i></div>'
+        + '<div class="qcard" id="qcard"><div class="qmeta"><span class="qcount">Soal '+(p.idx+1)+' dari '+p.queue.length+'</span><span class="qcount">Skor sesi: '+p.score+'</span></div>'
+        + (signKey ? '<div class="qsign">'+signSVG(signKey)+'</div>' : '')
+        + '<p class="qtext">'+esc(q.q)+'</p><div class="opts">'+opts+'</div>'+feedback+'</div>';
+    }
+    function bindPractice(){
+      const p = state.practice; if(!p) return;
+      const back = document.getElementById("p-back");
+      if(back) back.addEventListener("click", () => nav("latihan"));
+      if(p.done){
+        document.getElementById("p-home").addEventListener("click", () => nav("home"));
+        document.getElementById("p-again").addEventListener("click", () => startPractice(p.cat));
+        document.getElementById("p-cats").addEventListener("click", () => nav("latihan"));
+        return;
+      }
+      document.querySelectorAll("[data-opt]").forEach(b => b.addEventListener("click", () => answerPractice(parseInt(b.dataset.opt, 10))));
+      const next = document.getElementById("p-next");
+      if(next) next.addEventListener("click", nextPractice);
+    }
+    function answerPractice(pos){
+      const p = state.practice; if(!p || p.picked >= 0) return;
+      const item = p.queue[p.idx];
+      p.picked = pos;
+      const ok = pos === item.correctPos;
+      if(ok) p.score++;
+      Store.recordAnswer(item.q.cat, ok);
+      render();
+      if(!ok){
+        const card = document.getElementById("qcard");
+        if(card) card.classList.add("shake");
+      }
+      window.scrollTo(0,0);
+    }
+    function nextPractice(){
+      const p = state.practice; if(!p) return;
+      if(p.idx >= p.queue.length - 1){ p.done = true; }
+      else { p.idx++; p.picked = -1; }
+      render(); window.scrollTo(0,0);
+    }
+    </script>
+    <script>
+    "use strict";
+    /* ================= UJIAN SIMULASI ================= */
+    const EXAM_COUNT = 30, EXAM_SECONDS = 15 * 60, PASS_PCT = 70;
+    function renderUjianIntro(){
+      const d = Store.data;
+      const last = d.exams[0];
+      return '<div class="page-head"><div><h2>Ujian Simulasi</h2><div class="sub">Rasakan format ujian teori yang sebenarnya.</div></div></div>'
+      + '<div class="card">'
+      + '<p style="margin:0 0 10px;font-size:15.5px">Sama seperti ujian aslinya:</p>'
+      + '<ul style="margin:0;padding-left:20px;color:var(--muted);font-size:15px;line-height:1.75">'
+      + '<li><b style="color:var(--ink)">30 soal</b> pilihan ganda, diambil acak dari bank soal</li>'
+      + '<li>Waktu <b style="color:var(--ink)">15 menit</b>, dihitung mundur — habis waktu, jawaban otomatis terkumpul</li>'
+      + '<li><b style="color:var(--ink)">Lulus</b> bila benar minimal 70%, yaitu 21 dari 30 soal</li>'
+      + '<li>Bisa lompat antar soal dan menandai soal yang <b style="color:var(--ink)">ragu-ragu</b></li>'
+      + '</ul></div>'
+      + (last ? '<h2 class="sec">Ujian Terakhirmu</h2>' + examSummaryHTML(last) : '')
+      + '<div class="btn-row"><button class="btn" id="exam-start">Mulai Ujian</button></div>'
+      + '<p class="disclaimer" style="text-align:center">Tarik napas dulu. Salah di sini nggak apa-apa — justru di sinilah tempatnya salah.</p>';
+    }
+    function bindUjianIntro(){
+      document.getElementById("exam-start").addEventListener("click", startExam);
+    }
+    function startExam(){
+      const items = shuffle(QUESTIONS).slice(0, EXAM_COUNT).map(prepareQuestion);
+      state.exam = { items:items, idx:0, answers:new Array(EXAM_COUNT).fill(-1),
+        flags:new Array(EXAM_COUNT).fill(false), remain:EXAM_SECONDS,
+        timerId:null, startedAt:Date.now() };
+      state.gridOpen = true;
+      nav("exam");
+      state.exam.timerId = setInterval(tickExam, 1000);
+    }
+    function stopExamTimer(){
+      if(state.exam && state.exam.timerId){ clearInterval(state.exam.timerId); state.exam.timerId = null; }
+    }
+    function tickExam(){
+      const ex = state.exam;
+      if(!ex || state.screen !== "exam") return;
+      ex.remain--;
+      const t = document.getElementById("exam-timer");
+      if(t){
+        t.textContent = fmtTime(ex.remain);
+        t.classList.toggle("timer-danger", ex.remain <= 60 && ex.remain > 0);
+      }
+      if(ex.remain <= 0) finishExam(true);
+    }
+    function renderExam(){
+      const ex = state.exam;
+      if(!ex) return '<div class="empty">Tidak ada ujian yang sedang berjalan.</div>';
+      const item = ex.items[ex.idx];
+      const q = item.q;
+      const signKey = Q_SIGN[q.id];
+      const letters = ["A","B","C","D"];
+      const answeredCount = ex.answers.filter(a => a >= 0).length;
+      const grid = ex.items.map((it, i) => {
+        let cls = "";
+        if(ex.answers[i] >= 0) cls += " done";
+        if(ex.flags[i]) cls += " flag";
+        if(i === ex.idx) cls += " now";
+        return '<button class="'+cls.trim()+'" data-jump="'+i+'" aria-label="Soal '+(i+1)+'">'+(i+1)+'</button>';
+      }).join("");
+      const opts = item.order.map((origIdx, pos) =>
+        '<button class="opt'+(ex.answers[ex.idx] === pos ? " picked" : "")+'" data-eopt="'+pos+'"><span class="letter">'+letters[pos]+'</span><span>'+esc(q.opts[origIdx])+'</span></button>'
+      ).join("");
+      return '<div class="exam-top"><div class="row">'
+        + '<div class="timer'+(ex.remain <= 60 ? " timer-danger" : "")+'" id="exam-timer" aria-label="Sisa waktu">'+fmtTime(ex.remain)+'</div>'
+        + '<div class="answered-count">Terjawab<br/><b>'+answeredCount+'</b> / '+EXAM_COUNT+' soal</div>'
+        + '<button class="flag-btn'+(ex.flags[ex.idx] ? " on" : "")+'" id="exam-flag">'+ICONS.flag+' Ragu-ragu</button>'
+        + '</div>'
+        + '<div class="grid-wrap">'
+        + (state.gridOpen
+            ? '<div class="numgrid">'+grid+'</div><div class="legend"><span><i class="done"></i> Sudah dijawab</span><span><i class="dot"></i> Ditandai ragu-ragu</span><span><i></i> Belum dijawab</span></div>'
+            : '<button class="btn ghost sm" id="grid-show" style="width:100%">Tampilkan daftar nomor soal</button>')
+        + '</div></div>'
+        + '<div class="qcard"><div class="qmeta"><span class="qcount">Soal '+(ex.idx+1)+' dari '+EXAM_COUNT+'</span><span class="qcount">'+esc(CAT_NAME[q.cat])+'</span></div>'
+        + (signKey ? '<div class="qsign">'+signSVG(signKey)+'</div>' : '')
+        + '<p class="qtext">'+esc(q.q)+'</p><div class="opts">'+opts+'</div></div>'
+        + '<div class="exam-actions">'
+        + '<button class="btn ghost" id="exam-prev" '+(ex.idx===0?"disabled":"")+'>Sebelumnya</button>'
+        + (ex.idx < EXAM_COUNT - 1
+            ? '<button class="btn ghost" id="exam-next">Berikutnya</button>'
+            : '<button class="btn" id="exam-submit2">Kumpulkan</button>')
+        + '</div>'
+        + (ex.idx < EXAM_COUNT - 1 ? '<div class="btn-row"><button class="btn" id="exam-submit">Kumpulkan Jawaban</button></div>' : '');
+    }
+    function bindExam(){
+      const ex = state.exam; if(!ex) return;
+      document.querySelectorAll("[data-jump]").forEach(b => b.addEventListener("click", () => { ex.idx = parseInt(b.dataset.jump, 10); render(); }));
+      document.querySelectorAll("[data-eopt]").forEach(b => b.addEventListener("click", () => {
+        ex.answers[ex.idx] = parseInt(b.dataset.eopt, 10);
+        render();
+      }));
+      document.getElementById("exam-flag").addEventListener("click", () => { ex.flags[ex.idx] = !ex.flags[ex.idx]; render(); });
+      const prev = document.getElementById("exam-prev");
+      if(prev) prev.addEventListener("click", () => { if(ex.idx > 0){ ex.idx--; render(); } });
+      const next = document.getElementById("exam-next");
+      if(next) next.addEventListener("click", () => { if(ex.idx < EXAM_COUNT - 1){ ex.idx++; render(); } });
+      const gs = document.getElementById("grid-show");
+      if(gs) gs.addEventListener("click", () => { state.gridOpen = true; render(); });
+      ["exam-submit","exam-submit2"].forEach(id => {
+        const el = document.getElementById(id);
+        if(el) el.addEventListener("click", confirmSubmitExam);
+      });
+    }
+    function confirmSubmitExam(){
+      const ex = state.exam; if(!ex) return;
+      const unanswered = ex.answers.filter(a => a < 0).length;
+      const flagged = ex.flags.filter(Boolean).length;
+      openModal('<h3>Kumpulkan Sekarang?</h3>'
+        + (unanswered > 0
+            ? '<p>Masih ada <b>'+unanswered+' soal belum dijawab</b>. Soal kosong dihitung salah, lho.</p>'
+            : '<p>Semua soal sudah dijawab. Kerja bagus!</p>')
+        + (flagged > 0 ? '<p>Dan ada <b>'+flagged+' soal</b> yang kamu tandai ragu-ragu.</p>' : '')
+        + '<p>Setelah dikumpulkan, jawaban tidak bisa diubah lagi.</p>'
+        + '<div class="btn-row"><button class="btn red" id="m-submit">Ya, Kumpulkan</button>'
+        + '<button class="btn ghost" data-close>Cek Lagi</button></div>');
+      document.getElementById("m-submit").addEventListener("click", () => { closeModal(); finishExam(false); });
+    }
+    function confirmLeaveExam(after){
+      openModal('<h3>Keluar dari Ujian?</h3>'
+        + '<p>Ujian sedang berjalan. Kalau keluar sekarang, seluruh jawaban ujian ini <b>hilang</b> dan tidak tercatat.</p>'
+        + '<div class="btn-row"><button class="btn red" id="m-leave">Ya, Keluar</button>'
+        + '<button class="btn ghost" data-close>Lanjut Ujian</button></div>');
+      document.getElementById("m-leave").addEventListener("click", () => { closeModal(); after(); });
+    }
+    function finishExam(auto){
+      const ex = state.exam; if(!ex) return;
+      stopExamTimer();
+      let correct = 0;
+      const review = ex.items.map((item, i) => {
+        const picked = ex.answers[i];
+        const ok = picked === item.correctPos;
+        if(picked >= 0) Store.recordAnswer(item.q.cat, ok);
+        if(ok) correct++;
+        return { item:item, picked:picked, ok:ok };
+      });
+      const score = Math.round(correct / EXAM_COUNT * 100);
+      const secs = EXAM_SECONDS - Math.max(0, ex.remain);
+      const pass = score >= PASS_PCT;
+      const entry = { ts:Date.now(), score:score, correct:correct, total:EXAM_COUNT, pass:pass, secs:secs };
+      Store.recordExam(entry);
+      state.result = { score:score, correct:correct, wrong:EXAM_COUNT - correct, pass:pass, secs:secs, auto:!!auto, review:review };
+      state.exam = null;
+      nav("result");
+      if(pass) launchConfetti();
+    }
+
+    /* ================= HASIL UJIAN ================= */
+    function renderResult(){
+      const r = state.result;
+      if(!r) return '<div class="empty">Belum ada hasil ujian.</div>';
+      const letters = ["A","B","C","D"];
+      const review = r.review.map((rv, i) => {
+        const q = rv.item.q;
+        const signKey = Q_SIGN[q.id];
+        const userTxt = rv.picked >= 0 ? letters[rv.picked] + ". " + q.opts[rv.item.order[rv.picked]] : "Tidak dijawab";
+        const corrTxt = letters[rv.item.correctPos] + ". " + q.opts[rv.item.order[rv.item.correctPos]];
+        return '<div class="review-item">'
+          + (signKey ? '<div class="rsign">'+signSVG(signKey)+'</div>' : '')
+          + '<p class="rq"><span class="n">'+(i+1)+'.</span>'+esc(q.q)+'</p>'
+          + '<div class="ans-line '+(rv.ok ? "good" : "bad")+'"><span class="tag">Jawabanmu</span>'+esc(userTxt)+'</div>'
+          + (rv.ok ? '' : '<div class="ans-line good"><span class="tag">Jawaban benar</span>'+esc(corrTxt)+'</div>')
+          + '<p class="rexp">'+esc(q.exp)+' <b style="color:var(--ink)">'+esc(q.ref)+'</b></p></div>';
+      }).join("");
+      return '<div class="result-hero">'
+        + '<div class="sub" style="color:var(--muted);font-weight:600">'+(r.auto ? "Waktu habis — jawabanmu terkumpul otomatis." : "Hasil Ujian Simulasi")+'</div>'
+        + '<div class="big">'+r.score+'<small>%</small></div>'
+        + '<div class="verdict '+(r.pass ? "pass" : "fail")+'">'+(r.pass ? "LULUS!" : "BELUM LULUS")+'</div>'
+        + '<p class="cheer">'+(r.pass
+            ? "Keren! Kamu sudah melewati ambang 70%. Pertahankan ritmenya sampai hari ujian beneran, ya."
+            : "Kurang sedikit lagi menuju 70%. Lihat pembahasan di bawah, latih kategori yang masih sering salah, lalu coba lagi.")+'</p></div>'
+        + '<div class="tally">'
+        + '<div class="stat"><div class="num" style="color:var(--green)">'+r.correct+'</div><div class="lbl">Jawaban benar</div></div>'
+        + '<div class="stat"><div class="num" style="color:var(--red)">'+r.wrong+'</div><div class="lbl">Jawaban salah / kosong</div></div>'
+        + '<div class="stat"><div class="num">'+fmtTime(r.secs)+'</div><div class="lbl">Waktu pengerjaan</div></div>'
+        + '</div>'
+        + '<div class="btn-row two"><button class="btn" id="r-again">Ujian Lagi</button><button class="btn ghost" id="r-practice">Latihan Lagi</button></div>'
+        + '<h2 class="sec">Pembahasan Soal</h2>' + review
+        + '<div class="btn-row"><button class="btn ghost" id="r-home">Ke Beranda</button></div>';
+    }
+    function bindResult(){
+      const again = document.getElementById("r-again");
+      if(again) again.addEventListener("click", startExam);
+      const pr = document.getElementById("r-practice");
+      if(pr) pr.addEventListener("click", () => nav("latihan"));
+      const hm = document.getElementById("r-home");
+      if(hm) hm.addEventListener("click", () => nav("home"));
+    }
+
+    /* ================= CONFETTI (warna marka: kuning, putih, merah) ================= */
+    function launchConfetti(){
+      if(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      const cv = document.getElementById("confetti");
+      const ctx = cv.getContext("2d");
+      cv.width = window.innerWidth; cv.height = window.innerHeight;
+      cv.classList.remove("hidden");
+      const colors = ["#FFC800","#FFFFFF","#E5484D"];
+      const parts = [];
+      for(let i = 0; i < 150; i++){
+        parts.push({ x: Math.random() * cv.width, y: -20 - Math.random() * cv.height * 0.35,
+          w: 6 + Math.random() * 6, h: 8 + Math.random() * 8,
+          vy: 2.2 + Math.random() * 3.2, vx: -1.4 + Math.random() * 2.8,
+          rot: Math.random() * Math.PI, vr: -0.12 + Math.random() * 0.24,
+          color: colors[i % colors.length] });
+      }
+      const t0 = performance.now();
+      (function frame(now){
+        const elapsed = now - t0;
+        ctx.clearRect(0, 0, cv.width, cv.height);
+        let alive = false;
+        parts.forEach(p => {
+          p.x += p.vx; p.y += p.vy; p.rot += p.vr;
+          if(p.y < cv.height + 24) alive = true;
+          ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.rot);
+          ctx.fillStyle = p.color; ctx.globalAlpha = elapsed > 2400 ? Math.max(0, 1 - (elapsed - 2400) / 700) : 1;
+          ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h); ctx.restore();
+        });
+        if(alive && elapsed < 3400) requestAnimationFrame(frame);
+        else { ctx.clearRect(0, 0, cv.width, cv.height); cv.classList.add("hidden"); }
+      })(t0);
+    }
+
+    /* ================= KAMUS RAMBU ================= */
+    function renderKamus(){
+      const f = state.kamusFilter;
+      const chips = [{id:"semua", name:"Semua"}].concat(SIGN_GROUPS).map(g =>
+        '<button class="chip'+(f === g.id ? " on" : "")+'" data-filter="'+g.id+'">'+g.name+' ('+(g.id==="semua" ? SIGNS.length : SIGNS.filter(s => s.g === g.id).length)+')</button>'
+      ).join("");
+      const list = SIGNS.filter(s => f === "semua" || s.g === f);
+      const cards = list.map(s =>
+        '<button class="sign-card" data-sign="'+s.key+'">'+signSVG(s.key)+'<div class="nm">'+esc(s.name)+'</div><div class="grp">'+GROUP_NAME[s.g]+'</div></button>'
+      ).join("");
+      return '<div class="page-head"><div><h2>Kamus Rambu</h2><div class="sub">Ketuk rambu untuk melihat arti dan contoh situasinya di jalan.</div></div></div>'
+        + '<div class="chips">'+chips+'</div><div class="sign-grid">'+cards+'</div>';
+    }
+    function bindKamus(){
+      document.querySelectorAll("[data-filter]").forEach(b => b.addEventListener("click", () => { state.kamusFilter = b.dataset.filter; render(); }));
+      document.querySelectorAll("[data-sign]").forEach(b => b.addEventListener("click", () => showSignDetail(b.dataset.sign)));
+    }
+    function showSignDetail(key){
+      const s = SIGN_BY_KEY[key]; if(!s) return;
+      openModal('<div class="sign-big">'+signSVG(key)+'</div>'
+        + '<h3>'+esc(s.name)+'</h3>'
+        + '<p style="margin:0"><span class="badge" style="background:var(--panel2);color:var(--ink);border:1px solid var(--line)">Golongan '+GROUP_NAME[s.g]+'</span></p>'
+        + '<div class="lbl">Artinya</div><p>'+esc(s.arti)+'</p>'
+        + '<div class="lbl">Contoh Situasi</div><p>'+esc(s.contoh)+'</p>'
+        + '<div class="btn-row"><button class="btn ghost" data-close>Tutup</button></div>');
+      modalRoot.querySelectorAll("[data-close]").forEach(b => b.addEventListener("click", closeModal));
+    }
+
+    /* ================= STATISTIK ================= */
+    function renderStatistik(){
+      const d = Store.data;
+      const acc = accuracyOf(d.totalAnswered, d.totalCorrect);
+      const streak = calcStreak(d.days);
+      const passed = d.exams.filter(e => e.pass).length;
+      const catRows = CATEGORIES.map(c => {
+        const s = d.cats[c.id] || {a:0,c:0};
+        const a = accuracyOf(s.a, s.c);
+        return '<div style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;gap:10px;font-size:14.5px"><b>'+esc(c.name)+'</b><span style="color:var(--muted)">'+s.c+'/'+s.a+' benar · '+a+'%</span></div>'
+          + '<div class="bar"><i class="'+(a>=70?"g":"")+'" style="width:'+a+'%"></i></div></div>';
+      }).join("");
+      const hist = d.exams.length
+        ? d.exams.map(examSummaryHTML).join("")
+        : '<div class="empty">Belum ada riwayat ujian. Hasil Ujian Simulasi kamu akan tercatat di sini.</div>';
+      return '<div class="page-head"><div><h2>Statistik</h2><div class="sub">Semua progresmu tersimpan di perangkat ini.</div></div></div>'
+        + '<div class="stats">'
+        + '<div class="stat"><div class="num">'+d.totalAnswered+'</div><div class="lbl">Total soal dijawab</div></div>'
+        + '<div class="stat"><div class="num y">'+acc+'%</div><div class="lbl">Akurasi keseluruhan</div></div>'
+        + '<div class="stat"><div class="num">'+passed+'/'+d.exams.length+'</div><div class="lbl">Ujian lulus dari total ujian</div></div>'
+        + '<div class="stat"><div class="num y">'+streak+'</div><div class="lbl">Hari latihan beruntun</div></div>'
+        + '</div>'
+        + '<h2 class="sec">Akurasi per Kategori</h2><div class="card">'+catRows+'</div>'
+        + '<h2 class="sec">Riwayat Ujian</h2>' + hist
+        + '<div class="marka"></div>'
+        + '<h2 class="sec">Atur Ulang</h2>'
+        + '<p style="color:var(--muted);font-size:14.5px;margin:0 0 10px">Hapus semua progres, riwayat ujian, dan streak dari perangkat ini. Tindakan ini tidak bisa dibatalkan.</p>'
+        + '<button class="btn red" id="reset-btn">Reset Semua Data</button>';
+    }
+    function bindStatistik(){
+      const rb = document.getElementById("reset-btn");
+      if(rb) rb.addEventListener("click", () => {
+        openModal('<h3>Reset Semua Data?</h3>'
+          + '<p>Seluruh progres latihan, riwayat ujian, akurasi, dan streak akan <b>dihapus permanen</b> dari perangkat ini.</p>'
+          + '<div class="btn-row"><button class="btn red" id="m-reset">Ya, Hapus Semua</button>'
+          + '<button class="btn ghost" data-close>Batal</button></div>');
+        document.getElementById("m-reset").addEventListener("click", () => {
+          Store.reset(); closeModal(); nav("statistik");
+        });
+      });
+    }
+
+    /* ================= INIT ================= */
+    Store.load();
+    render();
+    </script>
+  </body>
+</html>
